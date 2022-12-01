@@ -258,37 +258,10 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
             self.state = 'v';
             self.vCallBack(self);
           }
-          var compTarget = null;
           if (!clientWidth) return;
-          //原始比例
-          var orgPre = self.designWidth / self.designHeight;
-          var currPre = clientWidth / windowHeight;
-          var res = 0;
-          var adWidth = function adWidth() {
-            //console.log('用宽度调整字体')
-            compTarget = clientWidth;
-            //计算设计字体大小和实际字体大小的比例关系
-            res = self.fontSize * (compTarget / self.designWidth);
-          };
-          var adHeight = function adHeight() {
-            //console.log('用高度调整字体')
-            compTarget = windowHeight;
-            //计算设计字体大小和实际字体大小的比例关系
-            res = self.fontSize * (compTarget / self.designHeight);
-          };
-          if (self.mode === 'auto') {
-            if (orgPre < currPre) {
-              adHeight();
-            } else {
-              adWidth();
-            }
-          } else if (self.mode === 'width') {
-            adWidth();
-          } else if (self.mode === 'height') {
-            adHeight();
-          }
-          document.documentElement.style.fontSize = res.toFixed(1) + 'px';
+          //document.documentElement.style.fontSize = res.toFixed(1) + 'px';
         };
+
       var resizeF = function resizeF() {
         self.debounceSetFontSize(recalc);
       };
