@@ -25,6 +25,5 @@
 		"noEmit": false,
 		"sourceMap": true
 	},
-	"include": ["src/**/*"],
-	"exclude": ["src/content/nativeComs/**/*"]
+	"include": ["src/index.ts", "src/iReso.ts", "resoHook.tsx"]
 }
