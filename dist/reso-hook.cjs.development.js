@@ -498,6 +498,31 @@ var useReso = function useReso(config) {
   }
 };
 
+(function (EscreenState) {
+  /**
+   * 横向屏幕
+   */
+  EscreenState["HORIZONTAL"] = "h";
+  /**
+   * 竖屏显示
+   */
+  EscreenState["VERTICAL"] = "v";
+})(exports.EscreenState || (exports.EscreenState = {}));
+(function (EresoMode) {
+  /**
+   * auto:自动选择高度还是宽度来调整
+   */
+  EresoMode["AUTO"] = "auto";
+  /**
+   * width:只通过宽度调整
+   */
+  EresoMode["WIDTH"] = "width";
+  /**
+   * height:只通过高度调整
+   */
+  EresoMode["HEIGHT"] = "height";
+})(exports.EresoMode || (exports.EresoMode = {}));
+
 exports._mobileAdp = _mobileAdp;
 exports.useReso = useReso;
 //# sourceMappingURL=reso-hook.cjs.development.js.map

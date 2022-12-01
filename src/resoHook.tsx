@@ -48,12 +48,13 @@ const useReso = function(
   /**
    * 适配
    */
-  const makeReso = function(_config) {
+  const makeReso = function(_config, _testState) {
     //let context = requireContext("../nativeComs/", false, /mobileAdp.js/);
     //let modul = context("./mobileAdp.js");
     let ___mobileAdp = _mobileAdp;
     let mobileAdp: any = new _mobileAdp(_config, config);
     let helTags: ReactElement;
+    let injectElements: ReactElement;
     if (!isRunningInServer) {
       //如果是运行在客户端上面就直接初始化
       if (typeof window['_a_d_p_'] !== 'undefined') {
@@ -63,20 +64,17 @@ const useReso = function(
       mobileAdp.init();
     } else {
       var codeString = codeStringify(___mobileAdp);
-      //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
-      //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
-      //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
-      helTags = (
-        <Helmet>
-          <script id="_a_d_p_">
-            {`
+
+      injectElements = (
+        <script id="_a_d_p_">
+          {`
                             window.__m_adp__ = ` +
-              codeString +
-              `;
+            codeString +
+            `;
 
                             var _adp_config = ` +
-              JSON.stringify(config) +
-              `;
+            JSON.stringify(config) +
+            `;
                             
                             if (_adp_config.hasOwnProperty("queryList")) {
                                 var clientWidth = window.document.documentElement.clientWidth;
@@ -105,13 +103,17 @@ const useReso = function(
                                 window._a_d_p_.init();
                             }
                         `}
-          </script>
-        </Helmet>
+        </script>
       );
+      //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
+      //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
+      //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
+      helTags = <Helmet>{injectElements}</Helmet>;
     }
     return {
-      data: { helTags: helTags },
+      data: { helTags: helTags, elemsnts: injectElements },
       funcs: mobileAdp,
+      screenState: _testState,
     };
   };
 
@@ -123,6 +125,16 @@ const useReso = function(
     }
   };
 
+  var clientWidth: number = window.document.documentElement.clientWidth;
+  var windowHeight: number = window.document.documentElement.clientHeight;
+  var testState: EscreenState = EscreenState.HORIZONTAL;
+
+  if (clientWidth > windowHeight) {
+    testState = EscreenState.HORIZONTAL;
+  } else {
+    testState = EscreenState.VERTICAL;
+  }
+
   /**
    * 如果是多条参数适配
    */
@@ -133,17 +145,6 @@ const useReso = function(
         $('[name=viewport]').remove();
         window['_a_d_p_']['distory']();
       }
-
-      var clientWidth: number = window.document.documentElement.clientWidth;
-      var windowHeight: number = window.document.documentElement.clientHeight;
-      var testState: EscreenState = EscreenState.HORIZONTAL;
-
-      if (clientWidth > windowHeight) {
-        testState = EscreenState.HORIZONTAL;
-      } else {
-        testState = EscreenState.VERTICAL;
-      }
-
       var result: any = null;
       var findedResoList: Array<Imq> = [];
       for (var i = 0; i < config.queryList.length; i++) {
@@ -183,10 +184,10 @@ const useReso = function(
 
       return result;
     } else {
-      return makeReso(config.queryList[0].mediaQuery.config);
+      return makeReso(config.queryList[0].mediaQuery.config, testState);
     }
   } else {
-    return makeReso(config);
+    return makeReso(config, testState);
   }
 };
 
