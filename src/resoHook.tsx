@@ -68,6 +68,7 @@ const useReso = function(
         }
       }
       mobileAdp.init();
+      window['_a_d_p_d'] = mobileAdp;
     } else {
       var codeString = codeStringify(___mobileAdp);
 
