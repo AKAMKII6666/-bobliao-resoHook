@@ -58,6 +58,7 @@ const useReso = function(
     let mobileAdp: any = new _mobileAdp(_config, config);
     let helTags: ReactElement;
     let injectElements: ReactElement;
+    let scrStr: string = '';
     if (!isRunningInServer) {
       //如果是运行在客户端上面就直接初始化
       if (typeof window['_a_d_p_d'] !== 'undefined') {
@@ -70,16 +71,15 @@ const useReso = function(
     } else {
       var codeString = codeStringify(___mobileAdp);
 
-      injectElements = (
-        <script id="_a_d_p_">
-          {`
+      scrStr =
+        `
                             window.__m_adp__ = ` +
-            codeString +
-            `;
+        codeString +
+        `;
 
                             var _adp_config = ` +
-            JSON.stringify(config) +
-            `;
+        JSON.stringify(config) +
+        `;
                             
                             if (_adp_config.hasOwnProperty("queryList")) {
                                 var clientWidth = window.document.documentElement.clientWidth;
@@ -109,16 +109,16 @@ const useReso = function(
                                 window._a_d_p_d = new __m_adp__(_adp_config);
                                 window._a_d_p_d.init();
                             }
-                        `}
-        </script>
-      );
+                        `;
+
+      injectElements = <script id="_a_d_p_">{scrStr}</script>;
       //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
       //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
       //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
       helTags = <Helmet>{injectElements}</Helmet>;
     }
     return {
-      data: { helTags: helTags, elemsnts: injectElements },
+      data: { helTags: helTags, elemsnts: injectElements, scriptStr: scrStr },
       funcs: mobileAdp,
       screenState: screenState,
     };

@@ -15,6 +15,10 @@ export interface Ireso {
      * 剥离了Helmet的版本
      */
     elemsnts: ReactElement;
+    /*
+     *脚本纯字符串
+     */
+    scriptStr: string;
   };
   /**
    * 返回初始化好的mobileAdp对象
