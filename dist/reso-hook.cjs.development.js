@@ -325,6 +325,9 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
     if (this.debounceTime <= 0) {
       _recalc();
     } else {
+      if (this.debounceTimeOut === null) {
+        _recalc();
+      }
       this.debounceTimeOut = setTimeout(function () {
         _recalc();
         this.debounceTimeOut = null;
