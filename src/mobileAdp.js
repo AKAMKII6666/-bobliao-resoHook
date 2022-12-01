@@ -267,19 +267,23 @@ const _mobileAdp = function(_options, _mOptions) {
           } else if (self.mode === 'height') {
             adHeight();
           }
-          self.debounceSetFontSize(res, docEl);
+          docEl.style.fontSize = res + 'px';
         };
+
+      let resizeF = function() {
+        this.debounceSetFontSize(recalc);
+      };
       /*
             window.onload = recalc;
             */
       if (!doc.addEventListener) return;
-      win.addEventListener(resizeEvt, recalc, false);
-      doc.addEventListener('DOMContentLoaded', recalc, false);
+      win.addEventListener(resizeEvt, resizeF, false);
+      doc.addEventListener('DOMContentLoaded', resizeF, false);
       self.distory = function() {
-        win.removeEventListener(resizeEvt, recalc);
-        doc.removeEventListener('DOMContentLoaded', recalc);
+        win.removeEventListener(resizeEvt, resizeF);
+        doc.removeEventListener('DOMContentLoaded', resizeF);
       };
-      recalc();
+      resizeF();
     })(document, window);
   };
 
@@ -288,12 +292,12 @@ const _mobileAdp = function(_options, _mOptions) {
   /**
    * 设置字体大小的时候进行防抖处理
    *  */
-  this.debounceSetFontSize = function(_fontsize, _documentElement) {
+  this.debounceSetFontSize = function(_recalc) {
     if (this.debounceTimeOut !== null) {
       clearTimeout(this.debounceTimeOut);
     }
     this.debounceTimeOut = setTimeout(function() {
-      _documentElement = _fontsize + 'px';
+      _recalc();
       this.debounceTimeOut = null;
     }, 500);
   };
