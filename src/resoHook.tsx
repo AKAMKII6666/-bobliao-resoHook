@@ -159,7 +159,7 @@ const useReso = function(
       }
       if (findedResoList.length !== 0) {
         if (findedResoList.length === 1) {
-          result = makeReso(findedResoList[0].mediaQuery.config);
+          result = makeReso(findedResoList[0].mediaQuery.config, testState);
         } else {
           var last: Imq = null;
           for (var i = 0; i < findedResoList.length; i++) {
@@ -178,7 +178,7 @@ const useReso = function(
               last = citem;
             }
           }
-          result = makeReso(last.mediaQuery.config);
+          result = makeReso(last.mediaQuery.config, testState);
         }
       }
 

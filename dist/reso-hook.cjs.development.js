@@ -404,12 +404,13 @@ var useReso = function useReso(config) {
   /**
    * 适配
    */
-  var makeReso = function makeReso(_config) {
+  var makeReso = function makeReso(_config, _testState) {
     //let context = requireContext("../nativeComs/", false, /mobileAdp.js/);
     //let modul = context("./mobileAdp.js");
     var ___mobileAdp = _mobileAdp;
     var mobileAdp = new _mobileAdp(_config, config);
     var helTags;
+    var injectElements;
     if (!useJquery.isRunningInServer) {
       //如果是运行在客户端上面就直接初始化
       if (typeof window['_a_d_p_'] !== 'undefined') {
@@ -419,18 +420,21 @@ var useReso = function useReso(config) {
       mobileAdp.init();
     } else {
       var codeString = codeStringify(___mobileAdp);
+      injectElements = React.createElement("script", {
+        id: "_a_d_p_"
+      }, "\n                            window.__m_adp__ = " + codeString + ";\n\n                            var _adp_config = " + JSON.stringify(config) + ";\n                            \n                            if (_adp_config.hasOwnProperty(\"queryList\")) {\n                                var clientWidth = window.document.documentElement.clientWidth;\n                                var windowHeight = window.document.documentElement.clientHeight;\n                                var testState = \"h\";\n                                if (clientWidth > windowHeight) {\n                                    testState = \"h\";\n                                } else {\n                                    testState = \"v\";\n                                }\n                                for (var i = 0; i < _adp_config.queryList.length; i++) {\n                                    var _item = _adp_config.queryList[i];\n                                    var _index = i;\n                                    var isCondition = false;\n                                    if (_item.mediaQuery.screenState === testState) {\n                                        isCondition = true;\n                                    }\n                                    if (isCondition) {\n                                        window._a_d_p_ = new __m_adp__(_item.mediaQuery.config,_adp_config);\n                                        window._a_d_p_.init();\n                                        break;\n                                    }\n                                }\n                            }else{\n                                window._a_d_p_ = new __m_adp__(_adp_config);\n                                window._a_d_p_.init();\n                            }\n                        ");
       //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
       //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
       //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
-      helTags = React.createElement(reactHelmet.Helmet, null, React.createElement("script", {
-        id: "_a_d_p_"
-      }, "\n                            window.__m_adp__ = " + codeString + ";\n\n                            var _adp_config = " + JSON.stringify(config) + ";\n                            \n                            if (_adp_config.hasOwnProperty(\"queryList\")) {\n                                var clientWidth = window.document.documentElement.clientWidth;\n                                var windowHeight = window.document.documentElement.clientHeight;\n                                var testState = \"h\";\n                                if (clientWidth > windowHeight) {\n                                    testState = \"h\";\n                                } else {\n                                    testState = \"v\";\n                                }\n                                for (var i = 0; i < _adp_config.queryList.length; i++) {\n                                    var _item = _adp_config.queryList[i];\n                                    var _index = i;\n                                    var isCondition = false;\n                                    if (_item.mediaQuery.screenState === testState) {\n                                        isCondition = true;\n                                    }\n                                    if (isCondition) {\n                                        window._a_d_p_ = new __m_adp__(_item.mediaQuery.config,_adp_config);\n                                        window._a_d_p_.init();\n                                        break;\n                                    }\n                                }\n                            }else{\n                                window._a_d_p_ = new __m_adp__(_adp_config);\n                                window._a_d_p_.init();\n                            }\n                        "));
+      helTags = React.createElement(reactHelmet.Helmet, null, injectElements);
     }
     return {
       data: {
-        helTags: helTags
+        helTags: helTags,
+        elemsnts: injectElements
       },
-      funcs: mobileAdp
+      funcs: mobileAdp,
+      screenState: _testState
     };
   };
   var getEnd = function getEnd(_ed) {
@@ -440,6 +444,14 @@ var useReso = function useReso(config) {
       return _ed;
     }
   };
+  var clientWidth = window.document.documentElement.clientWidth;
+  var windowHeight = window.document.documentElement.clientHeight;
+  var testState = EscreenState.HORIZONTAL;
+  if (clientWidth > windowHeight) {
+    testState = EscreenState.HORIZONTAL;
+  } else {
+    testState = EscreenState.VERTICAL;
+  }
   /**
    * 如果是多条参数适配
    */
@@ -449,14 +461,6 @@ var useReso = function useReso(config) {
       if (typeof window['_a_d_p_'] !== 'undefined') {
         $('[name=viewport]').remove();
         window['_a_d_p_']['distory']();
-      }
-      var clientWidth = window.document.documentElement.clientWidth;
-      var windowHeight = window.document.documentElement.clientHeight;
-      var testState = EscreenState.HORIZONTAL;
-      if (clientWidth > windowHeight) {
-        testState = EscreenState.HORIZONTAL;
-      } else {
-        testState = EscreenState.VERTICAL;
       }
       var result = null;
       var findedResoList = [];
@@ -472,7 +476,7 @@ var useReso = function useReso(config) {
       }
       if (findedResoList.length !== 0) {
         if (findedResoList.length === 1) {
-          result = makeReso(findedResoList[0].mediaQuery.config);
+          result = makeReso(findedResoList[0].mediaQuery.config, testState);
         } else {
           var last = null;
           for (var i = 0; i < findedResoList.length; i++) {
@@ -486,15 +490,15 @@ var useReso = function useReso(config) {
               last = citem;
             }
           }
-          result = makeReso(last.mediaQuery.config);
+          result = makeReso(last.mediaQuery.config, testState);
         }
       }
       return result;
     } else {
-      return makeReso(config.queryList[0].mediaQuery.config);
+      return makeReso(config.queryList[0].mediaQuery.config, testState);
     }
   } else {
-    return makeReso(config);
+    return makeReso(config, testState);
   }
 };
 
