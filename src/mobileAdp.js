@@ -39,6 +39,8 @@ const _mobileAdp = function(_options, _mOptions) {
     //width:只通过宽度调整
     //height:只通过高度调整
     mode: 'auto',
+    //防抖时间
+    debounceTime: 500,
   };
 
   //拷贝函数
@@ -72,6 +74,9 @@ const _mobileAdp = function(_options, _mOptions) {
 
   //大小限制选项
   this.scaleLimit = _options.scaleLimit;
+
+  //防抖时间
+  this.debounceTime = _options.debounceTime;
 
   ///调整模式
   //auto:自动选择高度还是宽度来调整
@@ -296,10 +301,14 @@ const _mobileAdp = function(_options, _mOptions) {
     if (this.debounceTimeOut !== null) {
       clearTimeout(this.debounceTimeOut);
     }
-    this.debounceTimeOut = setTimeout(function() {
+    if (this.debounceTime <= 0) {
       _recalc();
-      this.debounceTimeOut = null;
-    }, 500);
+    } else {
+      this.debounceTimeOut = setTimeout(function() {
+        _recalc();
+        this.debounceTimeOut = null;
+      }, this.debounceTime);
+    }
   };
 
   //适配viewPort

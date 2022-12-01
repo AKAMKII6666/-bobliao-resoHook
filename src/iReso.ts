@@ -98,6 +98,10 @@ export interface Iconfig {
    * 调整模式
    */
   mode?: EresoMode;
+  /**
+   * 防抖时间
+   */
+  debounceTime?: number;
 }
 
 /**

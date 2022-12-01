@@ -98,12 +98,14 @@ const useReso = function(
                                         isCondition = true;
                                     }
                                     if (isCondition) {
+										_item.mediaQuery.config.debounceTime = 0;
                                         window._a_d_p_d = new __m_adp__(_item.mediaQuery.config,_adp_config);
                                         window._a_d_p_d.init();
                                         break;
                                     }
                                 }
                             }else{
+								_adp_config.debounceTime = 0;
                                 window._a_d_p_d = new __m_adp__(_adp_config);
                                 window._a_d_p_d.init();
                             }
