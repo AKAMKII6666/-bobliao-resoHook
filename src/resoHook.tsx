@@ -59,7 +59,9 @@ const useReso = function(
       //如果是运行在客户端上面就直接初始化
       if (typeof window['_a_d_p_'] !== 'undefined') {
         $('[name=viewport]').remove();
-        window['_a_d_p_'].distory();
+        if (typeof window['_a_d_p_d']['distory'] !== 'undefined') {
+          window['_a_d_p_d']['distory']();
+        }
       }
       mobileAdp.init();
     } else {
