@@ -309,7 +309,7 @@ const _mobileAdp = function(_options, _mOptions) {
       }
       this.debounceTimeOut = setTimeout(function() {
         _recalc();
-        this.debounceTimeOut = null;
+        self.debounceTimeOut = null;
       }, this.debounceTime);
     }
   };
