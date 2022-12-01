@@ -140,7 +140,7 @@ const useReso = function(
     testState = EscreenState.VERTICAL;
   }
 
-  const testStateFunc = function(_isSetState) {
+  const testStateFunc = function(_isSetState: boolean) {
     clientWidth = window.document.documentElement.clientWidth;
     windowHeight = window.document.documentElement.clientHeight;
 
@@ -150,17 +150,20 @@ const useReso = function(
       testState = EscreenState.VERTICAL;
     }
 
-    if (typeof _isSetState === 'undefined') {
+    if (_isSetState === true) {
       setscreenState(testState);
     }
   };
 
   if (!isRunningInServer) {
+    const st = function() {
+      testStateFunc(true);
+    };
     useEffect(function(): ReturnType<React.EffectCallback> {
-      $(window).resize(testStateFunc);
-      testStateFunc(undefined);
+      $(window).resize(st);
+      testStateFunc(true);
       return function(): void {
-        $(window).unbind('resize', testStateFunc);
+        $(window).unbind('resize', st);
       };
     }, []);
     testStateFunc(false);
