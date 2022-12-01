@@ -287,7 +287,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           } else if (self.mode === 'height') {
             adHeight();
           }
-          docEl.style.fontSize = res + 'px';
+          document.documentElement.style.fontSize = res.toFixed(1) + 'px';
         };
       var resizeF = function resizeF() {
         self.debounceSetFontSize(recalc);
