@@ -60,6 +60,15 @@ const useReso = function(
     let injectElements: ReactElement;
     let scrStr: string = '';
     if (!isRunningInServer) {
+      //如果是运行在客户端上面就直接初始化
+      if (typeof window['_a_d_p_d'] !== 'undefined') {
+        $('[name=viewport]').remove();
+        if (typeof window['_a_d_p_d']['distory'] !== 'undefined') {
+          window['_a_d_p_d']['distory']();
+        }
+      }
+      mobileAdp.init();
+      window['_a_d_p_d'] = mobileAdp;
     } else {
       var codeString = codeStringify(___mobileAdp);
 

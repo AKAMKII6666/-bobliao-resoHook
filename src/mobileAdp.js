@@ -88,16 +88,7 @@ const _mobileAdp = function(_options, _mOptions) {
   this.state = '';
 
   //初始化
-  this.init = function(_callback) {
-    //先适配viewPort
-    this.adaptVP({ uWidth: this.designWidth });
-    //然后再适配rem
-    this.adpRem();
-
-    if (typeof _callback !== 'undefined') {
-      _callback();
-    }
-  };
+  this.init = function(_callback) {};
 
   //重新调整
   this.rebind = function(_options, _callBack) {
