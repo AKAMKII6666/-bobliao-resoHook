@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useJquery, { isRunningInServer } from '@bobliao/use-jquery-hook';
 import { Helmet } from 'react-helmet';
 
@@ -394,6 +394,9 @@ var useReso = function useReso(config) {
     };
   }
   var $ = useJquery();
+  var _useState = useState(EscreenState.HORIZONTAL),
+    screenState = _useState[0],
+    setscreenState = _useState[1];
   /**
    * 适配
    */
@@ -429,7 +432,7 @@ var useReso = function useReso(config) {
         elemsnts: injectElements
       },
       funcs: mobileAdp,
-      screenState: _testState
+      screenState: screenState
     };
   };
   var getEnd = function getEnd(_ed) {
@@ -447,7 +450,7 @@ var useReso = function useReso(config) {
   } else {
     testState = EscreenState.VERTICAL;
   }
-  if (!isRunningInServer) {
+  var testStateFunc = function testStateFunc() {
     clientWidth = window.document.documentElement.clientWidth;
     windowHeight = window.document.documentElement.clientHeight;
     if (clientWidth > windowHeight) {
@@ -455,6 +458,16 @@ var useReso = function useReso(config) {
     } else {
       testState = EscreenState.VERTICAL;
     }
+    setscreenState(testState);
+  };
+  if (!isRunningInServer) {
+    testStateFunc();
+    useEffect(function () {
+      $(window).resize(testStateFunc);
+      return function () {
+        $(window).unbind('resize', testStateFunc);
+      };
+    }, []);
   }
   /**
    * 如果是多条参数适配
@@ -482,7 +495,7 @@ var useReso = function useReso(config) {
       }
       if (findedResoList.length !== 0) {
         if (findedResoList.length === 1) {
-          result = makeReso(findedResoList[0].mediaQuery.config, testState);
+          result = makeReso(findedResoList[0].mediaQuery.config);
         } else {
           var last = null;
           for (var i = 0; i < findedResoList.length; i++) {
@@ -496,15 +509,15 @@ var useReso = function useReso(config) {
               last = citem;
             }
           }
-          result = makeReso(last.mediaQuery.config, testState);
+          result = makeReso(last.mediaQuery.config);
         }
       }
       return result;
     } else {
-      return makeReso(config.queryList[0].mediaQuery.config, testState);
+      return makeReso(config.queryList[0].mediaQuery.config);
     }
   } else {
-    return makeReso(config, testState);
+    return makeReso(config);
   }
 };
 

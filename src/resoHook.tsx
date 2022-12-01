@@ -2,7 +2,7 @@
  * 本文件为分辨率适配钩子
  * 廖力编写 2022/03/28
  */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ReactElement } from 'react';
 import {
   Iconfig,
@@ -45,6 +45,9 @@ const useReso = function(
   }
 ): Ireso {
   const $ = useJquery();
+  const [screenState, setscreenState] = useState<EscreenState>(
+    EscreenState.HORIZONTAL
+  );
   /**
    * 适配
    */
@@ -115,7 +118,7 @@ const useReso = function(
     return {
       data: { helTags: helTags, elemsnts: injectElements },
       funcs: mobileAdp,
-      screenState: _testState,
+      screenState: screenState,
     };
   };
 
@@ -137,7 +140,7 @@ const useReso = function(
     testState = EscreenState.VERTICAL;
   }
 
-  if (!isRunningInServer) {
+  const testStateFunc = function() {
     clientWidth = window.document.documentElement.clientWidth;
     windowHeight = window.document.documentElement.clientHeight;
 
@@ -146,6 +149,17 @@ const useReso = function(
     } else {
       testState = EscreenState.VERTICAL;
     }
+    setscreenState(testState);
+  };
+
+  if (!isRunningInServer) {
+    testStateFunc();
+    useEffect(function(): ReturnType<React.EffectCallback> {
+      $(window).resize(testStateFunc);
+      return function(): void {
+        $(window).unbind('resize', testStateFunc);
+      };
+    }, []);
   }
 
   /**

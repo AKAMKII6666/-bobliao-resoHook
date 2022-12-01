@@ -4,7 +4,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var React = _interopDefault(require('react'));
+var React = require('react');
+var React__default = _interopDefault(React);
 var useJquery = require('@bobliao/use-jquery-hook');
 var useJquery__default = _interopDefault(useJquery);
 var reactHelmet = require('react-helmet');
@@ -401,6 +402,9 @@ var useReso = function useReso(config) {
     };
   }
   var $ = useJquery__default();
+  var _useState = React.useState(EscreenState.HORIZONTAL),
+    screenState = _useState[0],
+    setscreenState = _useState[1];
   /**
    * 适配
    */
@@ -422,13 +426,13 @@ var useReso = function useReso(config) {
       mobileAdp.init();
     } else {
       var codeString = codeStringify(___mobileAdp);
-      injectElements = React.createElement("script", {
+      injectElements = React__default.createElement("script", {
         id: "_a_d_p_"
       }, "\n                            window.__m_adp__ = " + codeString + ";\n\n                            var _adp_config = " + JSON.stringify(config) + ";\n                            \n                            if (_adp_config.hasOwnProperty(\"queryList\")) {\n                                var clientWidth = window.document.documentElement.clientWidth;\n                                var windowHeight = window.document.documentElement.clientHeight;\n                                var testState = \"h\";\n                                if (clientWidth > windowHeight) {\n                                    testState = \"h\";\n                                } else {\n                                    testState = \"v\";\n                                }\n                                for (var i = 0; i < _adp_config.queryList.length; i++) {\n                                    var _item = _adp_config.queryList[i];\n                                    var _index = i;\n                                    var isCondition = false;\n                                    if (_item.mediaQuery.screenState === testState) {\n                                        isCondition = true;\n                                    }\n                                    if (isCondition) {\n                                        window._a_d_p_d = new __m_adp__(_item.mediaQuery.config,_adp_config);\n                                        window._a_d_p_d.init();\n                                        break;\n                                    }\n                                }\n                            }else{\n                                window._a_d_p_d = new __m_adp__(_adp_config);\n                                window._a_d_p_d.init();\n                            }\n                        ");
       //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
       //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
       //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
-      helTags = React.createElement(reactHelmet.Helmet, null, injectElements);
+      helTags = React__default.createElement(reactHelmet.Helmet, null, injectElements);
     }
     return {
       data: {
@@ -436,7 +440,7 @@ var useReso = function useReso(config) {
         elemsnts: injectElements
       },
       funcs: mobileAdp,
-      screenState: _testState
+      screenState: screenState
     };
   };
   var getEnd = function getEnd(_ed) {
@@ -454,7 +458,7 @@ var useReso = function useReso(config) {
   } else {
     testState = EscreenState.VERTICAL;
   }
-  if (!useJquery.isRunningInServer) {
+  var testStateFunc = function testStateFunc() {
     clientWidth = window.document.documentElement.clientWidth;
     windowHeight = window.document.documentElement.clientHeight;
     if (clientWidth > windowHeight) {
@@ -462,6 +466,16 @@ var useReso = function useReso(config) {
     } else {
       testState = EscreenState.VERTICAL;
     }
+    setscreenState(testState);
+  };
+  if (!useJquery.isRunningInServer) {
+    testStateFunc();
+    React.useEffect(function () {
+      $(window).resize(testStateFunc);
+      return function () {
+        $(window).unbind('resize', testStateFunc);
+      };
+    }, []);
   }
   /**
    * 如果是多条参数适配
@@ -489,7 +503,7 @@ var useReso = function useReso(config) {
       }
       if (findedResoList.length !== 0) {
         if (findedResoList.length === 1) {
-          result = makeReso(findedResoList[0].mediaQuery.config, testState);
+          result = makeReso(findedResoList[0].mediaQuery.config);
         } else {
           var last = null;
           for (var i = 0; i < findedResoList.length; i++) {
@@ -503,15 +517,15 @@ var useReso = function useReso(config) {
               last = citem;
             }
           }
-          result = makeReso(last.mediaQuery.config, testState);
+          result = makeReso(last.mediaQuery.config);
         }
       }
       return result;
     } else {
-      return makeReso(config.queryList[0].mediaQuery.config, testState);
+      return makeReso(config.queryList[0].mediaQuery.config);
     }
   } else {
-    return makeReso(config, testState);
+    return makeReso(config);
   }
 };
 
