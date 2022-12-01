@@ -125,14 +125,25 @@ const useReso = function(
     }
   };
 
-  var clientWidth: number = window.document.documentElement.clientWidth;
-  var windowHeight: number = window.document.documentElement.clientHeight;
+  var clientWidth: number = 1920;
+  var windowHeight: number = 1080;
   var testState: EscreenState = EscreenState.HORIZONTAL;
 
   if (clientWidth > windowHeight) {
     testState = EscreenState.HORIZONTAL;
   } else {
     testState = EscreenState.VERTICAL;
+  }
+
+  if (!isRunningInServer) {
+    clientWidth = window.document.documentElement.clientWidth;
+    windowHeight = window.document.documentElement.clientHeight;
+
+    if (clientWidth > windowHeight) {
+      testState = EscreenState.HORIZONTAL;
+    } else {
+      testState = EscreenState.VERTICAL;
+    }
   }
 
   /**

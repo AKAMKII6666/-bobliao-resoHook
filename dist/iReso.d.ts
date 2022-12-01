@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement } from 'react';
 /**
  * useReso 钩子返回的东西
  */
@@ -11,11 +11,19 @@ export interface Ireso {
          * 用于服务器端渲染时,进行分辨率预计算的写入元素
          */
         helTags: ReactElement;
+        /**
+         * 剥离了Helmet的版本
+         */
+        elemsnts: ReactElement;
     };
     /**
      * 返回初始化好的mobileAdp对象
      */
     funcs: any;
+    /**
+     * 屏幕状态
+     */
+    screenState: EscreenState;
 }
 /**
  * 设置分辨率适配器的工作模式
