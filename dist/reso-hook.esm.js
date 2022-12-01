@@ -461,9 +461,9 @@ var useReso = function useReso(config) {
     setscreenState(testState);
   };
   if (!isRunningInServer) {
-    testStateFunc();
     useEffect(function () {
       $(window).resize(testStateFunc);
+      testStateFunc();
       return function () {
         $(window).unbind('resize', testStateFunc);
       };

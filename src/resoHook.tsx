@@ -153,9 +153,9 @@ const useReso = function(
   };
 
   if (!isRunningInServer) {
-    testStateFunc();
     useEffect(function(): ReturnType<React.EffectCallback> {
       $(window).resize(testStateFunc);
+      testStateFunc();
       return function(): void {
         $(window).unbind('resize', testStateFunc);
       };

@@ -469,9 +469,9 @@ var useReso = function useReso(config) {
     setscreenState(testState);
   };
   if (!useJquery.isRunningInServer) {
-    testStateFunc();
     React.useEffect(function () {
       $(window).resize(testStateFunc);
+      testStateFunc();
       return function () {
         $(window).unbind('resize', testStateFunc);
       };
