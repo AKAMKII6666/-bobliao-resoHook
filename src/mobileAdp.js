@@ -271,7 +271,7 @@ const _mobileAdp = function(_options, _mOptions) {
         };
 
       let resizeF = function() {
-        this.debounceSetFontSize(recalc);
+        self.debounceSetFontSize(recalc);
       };
       /*
             window.onload = recalc;
