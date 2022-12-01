@@ -458,7 +458,7 @@ var useReso = function useReso(config) {
   } else {
     testState = EscreenState.VERTICAL;
   }
-  var testStateFunc = function testStateFunc() {
+  var testStateFunc = function testStateFunc(_isSetState) {
     clientWidth = window.document.documentElement.clientWidth;
     windowHeight = window.document.documentElement.clientHeight;
     if (clientWidth > windowHeight) {
@@ -466,16 +466,19 @@ var useReso = function useReso(config) {
     } else {
       testState = EscreenState.VERTICAL;
     }
-    setscreenState(testState);
+    if (typeof _isSetState === 'undefined') {
+      setscreenState(testState);
+    }
   };
   if (!useJquery.isRunningInServer) {
     React.useEffect(function () {
       $(window).resize(testStateFunc);
-      testStateFunc();
+      testStateFunc(undefined);
       return function () {
         $(window).unbind('resize', testStateFunc);
       };
     }, []);
+    testStateFunc(false);
   }
   /**
    * 如果是多条参数适配
