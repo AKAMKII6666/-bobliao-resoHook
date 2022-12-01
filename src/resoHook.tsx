@@ -154,7 +154,9 @@ const useReso = function(
     if (!isRunningInServer) {
       if (typeof window['_a_d_p_'] !== 'undefined') {
         $('[name=viewport]').remove();
-        window['_a_d_p_']['distory']();
+        if (typeof window['__m_adp__']['distory'] !== 'undefined') {
+          window['__m_adp__']['distory']();
+        }
       }
       var result: any = null;
       var findedResoList: Array<Imq> = [];
