@@ -1,10 +1,10 @@
 /*** examples/src/app.js ***/
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
-import all from "../../lib/index";
+import { useReso } from "../../lib/index";
 
 const App = () => {
-	console.log(all);
+	console.log(useReso);
 	return (
 		<>
 			<div>
