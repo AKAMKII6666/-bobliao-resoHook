@@ -342,11 +342,26 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   //原版算法已经找不到了
   //最后只找到了这个被压缩后的版本
   this.adaptVP = function (d) {
+    var vpObj = document.querySelector("meta[name='viewport']");
+    if (vpObj !== null) {
+      var width = '';
+      var arrVp = vpObj.content.split(',');
+      for (var i = 0; i < arrVp.length; i++) {
+        var item = arrVp[i].split('=');
+        if (item[0] === 'width') {
+          width = item[1];
+          break;
+        }
+      }
+      if (width === d) {
+        return;
+      }
+    }
     function e() {
       var e, i;
       return o.uWidth = d.uWidth ? d.uWidth : 640, o.dWidth = d.dWidth ? d.dWidth : window.screen.width || window.screen.availWidth, o.ratio = window.devicePixelRatio ? window.devicePixelRatio : 1, o.userAgent = navigator.userAgent, o.bConsole = d.bConsole ? d.bConsole : !1, d.mode ? void (o.mode = d.mode) : (e = o.userAgent.match(/Android/i), void (e && (o.mode = 'android-2.2', i = o.userAgent.match(/Android\s(\d+.\d+)/i), i && (i = parseFloat(i[1])), 2.2 == i || 2.3 == i ? o.mode = 'android-2.2' : 4.4 > i ? o.mode = 'android-dpi' : i >= 4.4 && (o.mode = o.dWidth > o.uWidth ? 'android-dpi' : 'android-scale'))));
     }
-    function i() {
+    function getContent() {
       var e,
         i,
         t,
@@ -370,12 +385,16 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           i = 160 * o.uWidth / o.dWidth * o.ratio;
           n = 'target-densitydpi=' + i + ', width=' + o.uWidth + ', user-scalable=no';
       }
-      t = document.querySelector("meta[name='viewport']") || document.createElement('meta');
-      t.name = 'viewport';
-      t.content = n;
-      a = document.getElementsByTagName('head');
-      if (a.length > 0) {
-        a[0].appendChild(t);
+      if (vpObj !== null) {
+        vpObj.content = n;
+      } else {
+        t = document.querySelector("meta[name='viewport']") || document.createElement('meta');
+        t.name = 'viewport';
+        t.content = n;
+        a = document.getElementsByTagName('head');
+        if (a.length > 0) {
+          a[0].appendChild(t);
+        }
       }
     }
     function t() {
@@ -395,7 +414,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
         userAgent: null,
         bConsole: !1
       };
-      e(), i(), o.bConsole && t();
+      e(), getContent(), o.bConsole && t();
     }
   };
 };
@@ -446,7 +465,15 @@ var useReso = function useReso(config) {
     var helTags;
     var injectElements;
     var scrStr = '';
-    if (!useJquery.isRunningInServer) ; else {
+    if (!useJquery.isRunningInServer) {
+      //如果是运行在客户端上面就直接初始化
+      if (typeof window['_a_d_p_d'] !== 'undefined') {
+        if (typeof window['_a_d_p_d']['distory'] !== 'undefined') {
+          window['_a_d_p_d']['distory']();
+        }
+      }
+      mobileAdp.init();
+    } else {
       var codeString = codeStringify(___mobileAdp);
       scrStr = "\n                            window.__m_adp__ = " + codeString + ";\n\n                            var _adp_config = " + JSON.stringify(config) + ";\n                            \n                            if (_adp_config.hasOwnProperty(\"queryList\")) {\n                                var clientWidth = window.document.documentElement.clientWidth;\n                                var windowHeight = window.document.documentElement.clientHeight;\n                                var testState = \"h\";\n                                if (clientWidth > windowHeight) {\n                                    testState = \"h\";\n                                } else {\n                                    testState = \"v\";\n                                }\n                                for (var i = 0; i < _adp_config.queryList.length; i++) {\n                                    var _item = _adp_config.queryList[i];\n                                    var _index = i;\n                                    var isCondition = false;\n                                    if (_item.mediaQuery.screenState === testState) {\n                                        isCondition = true;\n                                    }\n                                    if (isCondition) {\n\t\t\t\t\t\t\t\t\t\t_item.mediaQuery.config.debounceTime = 0;\n                                        window._a_d_p_d = new __m_adp__(_item.mediaQuery.config,_adp_config);\n                                        window._a_d_p_d.init();\n                                        break;\n                                    }\n                                }\n                            }else{\n\t\t\t\t\t\t\t\t_adp_config.debounceTime = 0;\n                                window._a_d_p_d = new __m_adp__(_adp_config);\n                                window._a_d_p_d.init();\n                            }\n                        ";
       injectElements = React__default.createElement("script", {
@@ -514,7 +541,6 @@ var useReso = function useReso(config) {
     config = config;
     if (!useJquery.isRunningInServer) {
       if (typeof window['_a_d_p_d'] !== 'undefined') {
-        $('[name=viewport]').remove();
         if (typeof window['_a_d_p_d']['distory'] !== 'undefined') {
           window['_a_d_p_d']['distory']();
         }

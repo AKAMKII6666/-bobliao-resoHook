@@ -88,7 +88,16 @@ const _mobileAdp = function(_options, _mOptions) {
   this.state = '';
 
   //初始化
-  this.init = function(_callback) {};
+  this.init = function(_callback) {
+    //先适配viewPort
+    this.adaptVP({ uWidth: this.designWidth });
+    //然后再适配rem
+    this.adpRem();
+
+    if (typeof _callback !== 'undefined') {
+      _callback();
+    }
+  };
 
   //重新调整
   this.rebind = function(_options, _callBack) {
@@ -312,6 +321,22 @@ const _mobileAdp = function(_options, _mOptions) {
   //原版算法已经找不到了
   //最后只找到了这个被压缩后的版本
   this.adaptVP = function(d) {
+    var vpObj = document.querySelector("meta[name='viewport']");
+    if (vpObj !== null) {
+      var width = '';
+      var arrVp = vpObj.content.split(',');
+      for (let i = 0; i < arrVp.length; i++) {
+        var item = arrVp[i].split('=');
+        if (item[0] === 'width') {
+          width = item[1];
+          break;
+        }
+      }
+
+      if (width === d) {
+        return;
+      }
+    }
     function e() {
       var e, i;
       return (
@@ -340,7 +365,7 @@ const _mobileAdp = function(_options, _mOptions) {
             ))
       );
     }
-    function i() {
+    function getContent() {
       var e,
         i,
         t,
@@ -391,14 +416,19 @@ const _mobileAdp = function(_options, _mOptions) {
             o.uWidth +
             ', user-scalable=no';
       }
-      t =
-        document.querySelector("meta[name='viewport']") ||
-        document.createElement('meta');
-      t.name = 'viewport';
-      t.content = n;
-      a = document.getElementsByTagName('head');
-      if (a.length > 0) {
-        a[0].appendChild(t);
+
+      if (vpObj !== null) {
+        vpObj.content = n;
+      } else {
+        t =
+          document.querySelector("meta[name='viewport']") ||
+          document.createElement('meta');
+        t.name = 'viewport';
+        t.content = n;
+        a = document.getElementsByTagName('head');
+        if (a.length > 0) {
+          a[0].appendChild(t);
+        }
       }
     }
     function t() {
@@ -417,7 +447,7 @@ const _mobileAdp = function(_options, _mOptions) {
         userAgent: null,
         bConsole: !1,
       };
-      e(), i(), o.bConsole && t();
+      e(), getContent(), o.bConsole && t();
     }
   };
 };
