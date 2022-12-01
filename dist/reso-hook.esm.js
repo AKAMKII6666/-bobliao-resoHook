@@ -299,6 +299,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
       win.addEventListener(resizeEvt, resizeF, false);
       doc.addEventListener('DOMContentLoaded', resizeF, false);
       self.distory = function () {
+        clearTimeout(self.debounceTimeOut);
         win.removeEventListener(resizeEvt, resizeF);
         doc.removeEventListener('DOMContentLoaded', resizeF);
       };

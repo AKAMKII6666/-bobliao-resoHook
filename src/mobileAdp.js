@@ -272,7 +272,7 @@ const _mobileAdp = function(_options, _mOptions) {
           } else if (self.mode === 'height') {
             adHeight();
           }
-          docEl.style.fontSize = res + 'px';
+          document.documentElement.style.fontSize = res.toFixed(1) + 'px';
         };
 
       let resizeF = function() {
