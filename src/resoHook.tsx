@@ -93,14 +93,14 @@ const useReso = function(
                                         isCondition = true;
                                     }
                                     if (isCondition) {
-                                        window._a_d_p_ = new __m_adp__(_item.mediaQuery.config,_adp_config);
-                                        window._a_d_p_.init();
+                                        window._a_d_p_d = new __m_adp__(_item.mediaQuery.config,_adp_config);
+                                        window._a_d_p_d.init();
                                         break;
                                     }
                                 }
                             }else{
-                                window._a_d_p_ = new __m_adp__(_adp_config);
-                                window._a_d_p_.init();
+                                window._a_d_p_d = new __m_adp__(_adp_config);
+                                window._a_d_p_d.init();
                             }
                         `}
         </script>
@@ -152,10 +152,10 @@ const useReso = function(
   if (config.hasOwnProperty('queryList')) {
     config = config as IconfigMutiple;
     if (!isRunningInServer) {
-      if (typeof window['_a_d_p_'] !== 'undefined') {
+      if (typeof window['_a_d_p_d'] !== 'undefined') {
         $('[name=viewport]').remove();
-        if (typeof window['__m_adp__']['distory'] !== 'undefined') {
-          window['__m_adp__']['distory']();
+        if (typeof window['_a_d_p_d']['distory'] !== 'undefined') {
+          window['_a_d_p_d']['distory']();
         }
       }
       var result: any = null;
