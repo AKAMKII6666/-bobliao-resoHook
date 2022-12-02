@@ -67,8 +67,8 @@
     "typescript": "^4.6.4"
   },
   "dependencies": {
-    "@bobliao/use-jquery-hook": "^0.1.5",
-    "react-helmet": "^6.1.0",
-    "code-stringify": "^2.0.3"
+    "@bobliao/use-jquery-hook": "0.1.6",
+    "code-stringify": "^2.0.3",
+    "react-helmet": "^6.1.0"
   }
 }
