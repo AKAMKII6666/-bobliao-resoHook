@@ -25,6 +25,9 @@ export interface Ireso {
      * 屏幕状态
      */
     screenState: EscreenState;
+    width: string | number;
+    height: string | number;
+    fontSize: string | number;
 }
 /**
  * 设置分辨率适配器的工作模式

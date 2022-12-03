@@ -28,6 +28,9 @@ export interface Ireso {
    * 屏幕状态
    */
   screenState: EscreenState;
+  width: string | number;
+  height: string | number;
+  fontSize: string | number;
 }
 
 /**

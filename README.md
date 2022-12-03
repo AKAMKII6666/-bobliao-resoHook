@@ -122,6 +122,23 @@ return (
     }
 )
 
+//如果您用的是nextjs,并且希望在html到达客户端的第一时间适配分辨率(防止抖动)，您可以在head中加入以下代码:
+return (
+    {
+        <>
+            <Head>
+                <meta name="viewport" content={"width=" + reso.width} />
+				<script
+					id="_a_d_p_"
+					dangerouslySetInnerHTML={{
+						__html: reso.data.scriptStr,
+					}}
+				></script>
+            </Head>
+        </>
+    }
+)
+
 /**
  * reso.data.helTags
  * 它会在服务器端渲染的时候就将分辨率适配代码插入进头部

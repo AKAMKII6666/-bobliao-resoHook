@@ -103,7 +103,8 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   _options = extend(this.defaultOptions, _options); //rem相对字体大小起始大小
   //单位像素
 
-  this.fontSize = _options.fontSize; //设计稿宽度
+  this.fontSize = _options.fontSize;
+  this.computedFontSize = 0; //设计稿宽度
 
   this.designWidth = _options.designWidth; //设计稿高度
 
@@ -304,6 +305,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
         }
 
         document.documentElement.style.fontSize = res.toFixed(1) + 'px';
+        self.computedFontSize = Number(res.toFixed(1));
       };
 
       var resizeF = function resizeF() {
@@ -360,24 +362,21 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
 
   this.adaptVP = function (d) {
     var vpObj = document.querySelector("meta[name='viewport']");
-
+    /* 
     if (vpObj !== null) {
       var width = '';
       var arrVp = vpObj.content.split(',');
-
-      for (var i = 0; i < arrVp.length; i++) {
+      for (let i = 0; i < arrVp.length; i++) {
         var item = arrVp[i].split('=');
-
         if (item[0] === 'width') {
           width = item[1];
           break;
         }
       }
-
-      if (width === d) {
+        if (width === d) {
         return;
       }
-    }
+    } */
 
     function e() {
       var e, i;
@@ -386,7 +385,6 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
 
     function getContent() {
       var e,
-          i,
           t,
           a,
           n = '',
@@ -405,13 +403,11 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           d.dWidth || (o.dWidth = 2 == o.ratio ? 720 : 1.5 == o.ratio ? 480 : 1 == o.ratio ? 320 : 0.75 == o.ratio ? 240 : 480), e = window.screen.width || window.screen.availWidth, 320 == e ? o.dWidth = o.ratio * e : 640 > e && (o.dWidth = e), o.mode = 'android-dpi', r = !0;
 
         case 'android-dpi':
-          i = 160 * o.uWidth / o.dWidth * o.ratio, n = 'target-densitydpi=' + i + ', width=' + o.uWidth + ', user-scalable=no', r && (o.mode = 'android-2.2');
+          n = ' width=' + o.uWidth + ', user-scalable=no', r && (o.mode = 'android-2.2');
           break;
 
         case 'android-scale':
-          //n = "width=" + o.uWidth + ", user-scalable=no";
-          i = 160 * o.uWidth / o.dWidth * o.ratio;
-          n = 'target-densitydpi=' + i + ', width=' + o.uWidth + ', user-scalable=no';
+          n = 'width=' + o.uWidth + ', user-scalable=no';
       }
 
       if (vpObj !== null) {
@@ -531,7 +527,10 @@ var useReso = function useReso(config) {
         scriptStr: scrStr
       },
       funcs: mobileAdp,
-      screenState: screenState
+      screenState: screenState,
+      width: mobileAdp.designWidth,
+      height: mobileAdp.designHeight,
+      fontSize: mobileAdp.computedFontSize
     };
   };
 

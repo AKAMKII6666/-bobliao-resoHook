@@ -48,6 +48,7 @@ const useReso = function(
   const [screenState, setscreenState] = useState<EscreenState>(
     EscreenState.HORIZONTAL
   );
+
   /**
    * 适配
    */
@@ -120,6 +121,9 @@ const useReso = function(
       data: { helTags: helTags, elemsnts: injectElements, scriptStr: scrStr },
       funcs: mobileAdp,
       screenState: screenState,
+      width: mobileAdp.designWidth,
+      height: mobileAdp.designHeight,
+      fontSize: mobileAdp.computedFontSize,
     };
   };
 

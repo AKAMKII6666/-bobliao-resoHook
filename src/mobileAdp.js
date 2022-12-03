@@ -61,6 +61,7 @@ const _mobileAdp = function(_options, _mOptions) {
   //rem相对字体大小起始大小
   //单位像素
   this.fontSize = _options.fontSize;
+  this.computedFontSize = 0;
   //设计稿宽度
   this.designWidth = _options.designWidth;
   //设计稿高度
@@ -273,6 +274,7 @@ const _mobileAdp = function(_options, _mOptions) {
             adHeight();
           }
           document.documentElement.style.fontSize = res.toFixed(1) + 'px';
+          self.computedFontSize = Number(res.toFixed(1));
         };
 
       let resizeF = function() {
@@ -322,6 +324,7 @@ const _mobileAdp = function(_options, _mOptions) {
   //最后只找到了这个被压缩后的版本
   this.adaptVP = function(d) {
     var vpObj = document.querySelector("meta[name='viewport']");
+    /* 
     if (vpObj !== null) {
       var width = '';
       var arrVp = vpObj.content.split(',');
@@ -336,7 +339,7 @@ const _mobileAdp = function(_options, _mOptions) {
       if (width === d) {
         return;
       }
-    }
+    } */
     function e() {
       var e, i;
       return (
@@ -398,23 +401,12 @@ const _mobileAdp = function(_options, _mOptions) {
             (r = !0);
         case 'android-dpi':
           (i = ((160 * o.uWidth) / o.dWidth) * o.ratio),
-            (n =
-              'target-densitydpi=' +
-              i +
-              ', width=' +
-              o.uWidth +
-              ', user-scalable=no'),
+            (n = ' width=' + o.uWidth + ', user-scalable=no'),
             r && (o.mode = 'android-2.2');
           break;
         case 'android-scale':
-          //n = "width=" + o.uWidth + ", user-scalable=no";
           i = ((160 * o.uWidth) / o.dWidth) * o.ratio;
-          n =
-            'target-densitydpi=' +
-            i +
-            ', width=' +
-            o.uWidth +
-            ', user-scalable=no';
+          n = 'width=' + o.uWidth + ', user-scalable=no';
       }
 
       if (vpObj !== null) {
