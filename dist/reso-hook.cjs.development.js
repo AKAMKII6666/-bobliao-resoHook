@@ -461,6 +461,12 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
  */
 
 var codeStringify = /*#__PURE__*/require('code-stringify');
+/**
+ * 创建一个需要全局使用的context
+ **/
+
+
+var resoContext = /*#__PURE__*/React.createContext({});
 
 var useReso = function useReso(config) {
   if (config === void 0) {
@@ -652,6 +658,11 @@ var useReso = function useReso(config) {
   }
 };
 
+var useResoContext = function useResoContext() {
+  var r = React.useContext(resoContext);
+  return r;
+};
+
 (function (EscreenState) {
   /**
    * 横向屏幕
@@ -682,5 +693,7 @@ var useReso = function useReso(config) {
 })(exports.EresoMode || (exports.EresoMode = {}));
 
 exports._mobileAdp = _mobileAdp;
+exports.resoContext = resoContext;
 exports.useReso = useReso;
+exports.useResoContext = useResoContext;
 //# sourceMappingURL=reso-hook.cjs.development.js.map

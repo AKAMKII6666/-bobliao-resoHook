@@ -1,4 +1,4 @@
-import useReso, { _mobileAdp } from './resoHook';
+import useReso, { _mobileAdp, resoContext, useResoContext } from './resoHook';
 export type { Ireso, Iconfig, IconfigMutiple, Imq, queryItem } from './iReso';
 /**
  * 屏幕状态
@@ -30,4 +30,4 @@ export declare enum EresoMode {
      */
     HEIGHT = "height"
 }
-export { useReso, _mobileAdp };
+export { useReso, _mobileAdp, resoContext, useResoContext };

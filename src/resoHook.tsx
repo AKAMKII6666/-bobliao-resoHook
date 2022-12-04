@@ -2,7 +2,7 @@
  * 本文件为分辨率适配钩子
  * 廖力编写 2022/03/28
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { ReactElement } from 'react';
 import {
   Iconfig,
@@ -19,6 +19,11 @@ import { Helmet } from 'react-helmet';
 const codeStringify = require('code-stringify');
 
 export type config = Iconfig | IconfigMutiple;
+
+/**
+ * 创建一个需要全局使用的context
+ **/
+const resoContext = createContext<Ireso>({} as Ireso);
 
 const useReso = function(
   config: config = {
@@ -231,4 +236,9 @@ const useReso = function(
   }
 };
 
-export { useReso as default, _mobileAdp };
+let useResoContext = function(): Ireso {
+  var r: Ireso = useContext(resoContext);
+  return r;
+};
+
+export { useReso as default, _mobileAdp, resoContext, useResoContext };

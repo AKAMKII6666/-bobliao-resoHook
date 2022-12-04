@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import useJquery, { isRunningInServer } from '@bobliao/use-jquery-hook';
 import { Helmet } from 'react-helmet';
 
@@ -453,6 +453,12 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
  */
 
 var codeStringify = /*#__PURE__*/require('code-stringify');
+/**
+ * 创建一个需要全局使用的context
+ **/
+
+
+var resoContext = /*#__PURE__*/createContext({});
 
 var useReso = function useReso(config) {
   if (config === void 0) {
@@ -644,6 +650,11 @@ var useReso = function useReso(config) {
   }
 };
 
+var useResoContext = function useResoContext() {
+  var r = useContext(resoContext);
+  return r;
+};
+
 /**
  * 屏幕状态
  */
@@ -685,5 +696,5 @@ var EresoMode$1;
   EresoMode["HEIGHT"] = "height";
 })(EresoMode$1 || (EresoMode$1 = {}));
 
-export { EresoMode$1 as EresoMode, EscreenState$1 as EscreenState, _mobileAdp, useReso };
+export { EresoMode$1 as EresoMode, EscreenState$1 as EscreenState, _mobileAdp, resoContext, useReso, useResoContext };
 //# sourceMappingURL=reso-hook.esm.js.map
