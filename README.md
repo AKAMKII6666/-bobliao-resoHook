@@ -1,6 +1,6 @@
 # -bobliao-resoHook
 
-![](https://raw.githubusercontent.com/AKAMKII6666/-bobliao-resoHook/main/exampleImage/1.gif)
+![](https://raw.githubusercontent.com/AKAMKII6666/-bobliao-resoHook/main/exampleImage/1.gif?token=GHSAT0AAAAAAB23FRNUS37OVAC4XU73B5WGY4RWKFA)
 
 # rem Resolution adaptive component [English]
 
