@@ -184,7 +184,7 @@ return (
 
 ```
 
-## English version done here,more futures please watch chinese version.
+## English version done here,more futures please read chinese version.
 
 # rem 布局自适应组件 [中文]
 
