@@ -1,5 +1,7 @@
 # -bobliao-resoHook
 
+![](https://raw.githubusercontent.com/AKAMKII6666/-bobliao-resoHook/main/exampleImage/1.gif)
+
 # rem Resolution adaptive component [English]
 
 When using rem to be the unit of your react application，it would automaticly adaptive resolution<br>
