@@ -1,6 +1,192 @@
 # -bobliao-resoHook
 
-# rem 布局自适应组件
+# rem Resolution adaptive component [English]
+
+When using rem to be the unit of your react application，it would automaticly adaptive resolution<br>
+This component will set the document.documentElement.fontsize with a appropriate proportion by the with/height of your design draft automatictlly. <br>
+Use it with rem wold make your UI that is consistent with the design draft。to adapt to various screen sizes<br>
+Or adapt the web interface of mobile。<br>
+
+`It will calculat when：1.when useReso()。2.when window resized。`
+
+If you want to use this component,please make sure you will whrite you css with rem completely<br>
+
+```javascript
+import {
+  EresoMode,
+  EscreenState,
+  IconfigMutiple,
+  Iconfig,
+  Ireso,
+  useReso,
+} from '@bobliao/reso-hook';
+/**
+ * Adapt resolution
+ */
+const resoCondition: IconfigMutiple = {
+  queryList: [
+    {
+      mediaQuery: {
+        screenState: EscreenState.HORIZONTAL,
+        config: {
+          //In this case,rem based on 14px  unit:(px)
+          fontSize: 14,
+          //Design draft width/height (px)
+          designWidth: 1920,
+          designHeight: 1280,
+          //Scale limit
+          //Use it to scale limit,avoid to scale to small or too large when resizeing window
+          scaleLimit: {
+            //Is it enable
+            enable: true,
+            //unit:(px)
+            maxWidth: 1900,
+            //unit:(px)
+            minWidth: 950,
+            //unit:(px)
+            maxHeight: 99999999,
+            //unit:(px)
+            minHeight: 99,
+          },
+          //Adapt mode
+          //auto:It will automatictlly choose width or height to adjust proportion
+          //width:Aways use width to adjust proportion
+          //height:Aways use height to adjust proportion
+          mode: EresoMode.WIDTH,
+          //Debounce when resize,avoid to set document.documentElement.fontsize too many times,default 500ms set 0 to disable debounce
+          debounceTime:0,
+        },
+      },
+    },
+    {
+      mediaQuery: {
+        screenState: EscreenState.VERTICAL,
+        config: {
+          //Rem based on 14px  unit:(px)
+          fontSize: 14,
+          //Design draft width/height (px)
+          //This is in mobile
+          designWidth: 750,
+          designHeight: 500,
+           //Adapt mode
+          //auto:It will automatictlly choose width or height to adjust proportion
+          //width:Aways use width to adjust proportion
+          //height:Aways use height to adjust proportion
+          mode: EresoMode.AUTO,
+          //Debounce when resize,avoid to set document.documentElement.fontsize too many times,default 500ms. Set 0 to disable debounce and it will be smoothly scale when resize.
+          debounceTime:0,
+        },
+      },
+    },
+  ],
+};
+
+/**
+ * Adapt resolution with upperside config
+ */
+const reso:Ireso = useReso(resoCondition);
+
+/**
+ * Get screen state
+ */
+if(reso.screenState === EscreenState.VERTICAL){
+    //Mobile screen
+    console.log(reso.screenState)// = "v"
+}
+
+if(reso.screenState === EscreenState.HORIZONTAL){
+    //PC screen
+    console.log(reso.screenState)// = "h"
+}
+
+//Could use like this:
+return (
+    {
+        (function(){
+            if(reso.screenState === EscreenState.HORIZONTAL){
+                return <div>This is PC UI</div>
+            }else{
+                return <div>This is mobile UI</div>
+            }
+        })()
+    }
+)
+
+//resoHook exported context,it allows you to initialize it in singleton mode at the top of your project and pass some information down：
+import { EresoMode, EscreenState, IconfigMutiple, Ireso, useReso, resoContext } from "@bobliao/reso-hook";
+
+
+/**
+ * Configuration
+ */
+const resoCondition: IconfigMutiple = {...};
+/**
+ * Use this hook at the top level of your project
+ */
+const reso: Ireso = useReso(resoCondition);
+
+/**
+ * Apply it to the global
+ */
+<resoContext.Provider value={reso}>
+    {Inside contents of your app}
+</resoContext.Provider>
+
+//You could use it "Inside your app":
+import { Ireso, useResoContext, EscreenState } from "@bobliao/reso-hook";
+
+//useContext
+const reso: Ireso = useResoContext();
+
+//Get the status of the screen
+return (
+    {
+        (function(){
+            if(reso.screenState === EscreenState.HORIZONTAL){
+                return <div>This is PC UI</div>
+            }else{
+                return <div>This is mobile UI</div>
+            }
+        })()
+    }
+)
+
+
+
+//If you are using razzle ,so you need to make adapt when the page was dry
+//If you don't do it,the page will shakeing once when real javascript code arrived(When Hydrateing)：
+return (
+    {
+        <>
+            {reso.data.helTags}
+            <div>....</div>
+        </>
+    }
+)
+
+//If you r using Nextjs,you could do this to avoid page shakeing when hydrateing
+return (
+    {
+        <>
+            <Head>
+                <meta name="viewport" content={"width=" + reso.width} />
+				<script
+					id="_a_d_p_"
+					dangerouslySetInnerHTML={{
+						__html: reso.data.scriptStr,
+					}}
+				></script>
+            </Head>
+        </>
+    }
+)
+
+
+```
+
+## English version done here,more futures please watch chinese version.
+
+# rem 布局自适应组件 [中文]
 
 用于 rem 布局时，进行分辨率适配的组件<br>
 此组件会依据设计稿的尺寸（宽高），对比当前浏览器的尺寸（宽高）计算出合适的字体大小<br>
