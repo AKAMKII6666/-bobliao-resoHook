@@ -110,6 +110,46 @@ return (
     }
 )
 
+//resoHook导出了context,方便您在您的项目顶端以单例模式初始化它，并往下传递一些信息：
+import { EresoMode, EscreenState, IconfigMutiple, Ireso, useReso, resoContext } from "@bobliao/reso-hook";
+
+
+/**
+ * 编写配置
+ */
+const resoCondition: IconfigMutiple = {...};
+/**
+ * 在您的项目顶层使用这个钩子
+ */
+const reso: Ireso = useReso(resoCondition);
+
+/**
+ * 将其应用到全局
+ */
+<resoContext.Provider value={reso}>
+    {这里是您app的内部内容}
+</resoContext.Provider>
+
+//在您的“app内部内容”中这样应用它:
+import { Ireso, useResoContext, EscreenState } from "@bobliao/reso-hook";
+
+//取出context
+const reso: Ireso = useResoContext();
+
+//辨别横屏或竖屏
+return (
+    {
+        (function(){
+            if(reso.screenState === EscreenState.HORIZONTAL){
+                return <div>这是横屏(pc)的界面</div>
+            }else{
+                return <div>这是竖屏(移动端)的界面</div>
+            }
+        })()
+    }
+)
+
+
 
 //如果您用的是razzle 那么就面临请求的页面从服务器上下来，第一时间适配分辨率的问题
 //否则可能造成页面抖动，这个时候在页面上加入resoHook中导出的Helmet就好了：
