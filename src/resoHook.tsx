@@ -17,7 +17,6 @@ import useJquery, { isRunningInServer } from '@bobliao/use-jquery-hook';
 import { Helmet } from 'react-helmet';
 //import requireContext from 'require-context.macro';
 import codeStringify from 'code-stringify';
-import UglifyJS from 'uglify-js';
 
 export type config = Iconfig | IconfigMutiple;
 
@@ -75,6 +74,7 @@ const useReso = function(
       }
       mobileAdp.init();
     } else {
+      let UglifyJS = require('uglify-js');
       var codeString = codeStringify(___mobileAdp);
 
       scrStr =
