@@ -69,6 +69,7 @@
   "dependencies": {
     "@bobliao/use-jquery-hook": "0.1.6",
     "code-stringify": "^2.0.3",
-    "react-helmet": "^6.1.0"
+    "react-helmet": "^6.1.0",
+    "uglify-js": "^3.17.4"
   }
 }

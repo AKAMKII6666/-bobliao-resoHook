@@ -16,7 +16,8 @@ import { _mobileAdp } from './mobileAdp';
 import useJquery, { isRunningInServer } from '@bobliao/use-jquery-hook';
 import { Helmet } from 'react-helmet';
 //import requireContext from 'require-context.macro';
-const codeStringify = require('code-stringify');
+import codeStringify from 'code-stringify';
+import UglifyJS from 'uglify-js';
 
 export type config = Iconfig | IconfigMutiple;
 
@@ -115,7 +116,8 @@ const useReso = function(
                                 window._a_d_p_d.init();
                             }
                         `;
-
+      let code = { 'reso.js': scrStr };
+      scrStr = UglifyJS.minify(code).code;
       injectElements = <script id="_a_d_p_">{scrStr}</script>;
       //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
       //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
