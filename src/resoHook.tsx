@@ -162,7 +162,10 @@ const useReso = function(
       testState = EscreenState.VERTICAL;
     }
 
-    if (typeof window['_a_d_p_d_lockConfig'] !== 'undefined') {
+    if (
+      _isSetState === true &&
+      typeof window['_a_d_p_d_lockConfig'] !== 'undefined'
+    ) {
       setscreenState(window['_a_d_p_d_lockConfig'].screenState);
     } else if (_isSetState === true) {
       setscreenState(testState);
