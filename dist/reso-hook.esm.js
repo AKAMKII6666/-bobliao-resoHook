@@ -2,7 +2,6 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import useJquery, { isRunningInServer } from '@bobliao/use-jquery-hook';
 import { Helmet } from 'react-helmet';
 import codeStringify from 'code-stringify';
-import UglifyJS from 'uglify-js';
 
 /**
  * 设置分辨率适配器的工作模式
@@ -514,6 +513,8 @@ var useReso = function useReso(config) {
 
       mobileAdp.init();
     } else {
+      var UglifyJS = require('uglify-js');
+
       var codeString = codeStringify(___mobileAdp);
       scrStr = "\n                            window.__m_adp__ = " + codeString + ";\n\n                            var _adp_config = " + JSON.stringify(config) + ";\n                            \n                            if (_adp_config.hasOwnProperty(\"queryList\")) {\n                                var clientWidth = window.document.documentElement.clientWidth;\n                                var windowHeight = window.document.documentElement.clientHeight;\n                                var testState = \"h\";\n                                if (clientWidth > windowHeight) {\n                                    testState = \"h\";\n                                } else {\n                                    testState = \"v\";\n                                }\n                                for (var i = 0; i < _adp_config.queryList.length; i++) {\n                                    var _item = _adp_config.queryList[i];\n                                    var _index = i;\n                                    var isCondition = false;\n                                    if (_item.mediaQuery.screenState === testState) {\n                                        isCondition = true;\n                                    }\n                                    if (isCondition) {\n\t\t\t\t\t\t\t\t\t\t_item.mediaQuery.config.debounceTime = 0;\n                                        window._a_d_p_d = new __m_adp__(_item.mediaQuery.config,_adp_config);\n                                        window._a_d_p_d.init();\n                                        break;\n                                    }\n                                }\n                            }else{\n\t\t\t\t\t\t\t\t_adp_config.debounceTime = 0;\n                                window._a_d_p_d = new __m_adp__(_adp_config);\n                                window._a_d_p_d.init();\n                            }\n                        ";
       var code = {
@@ -603,6 +604,11 @@ var useReso = function useReso(config) {
         if (typeof window['_a_d_p_d']['distory'] !== 'undefined') {
           window['_a_d_p_d']['distory']();
         }
+      } //如果在内存里找到已经缓存好的屏幕状态配置，就直接使用这个配置，不要重新适配
+
+
+      if (typeof window['_a_d_p_d_lockConfig'] !== 'undefined') {
+        return makeReso(window['_a_d_p_d_lockConfig'].mediaQuery.config);
       }
 
       var result = null;
@@ -613,7 +619,11 @@ var useReso = function useReso(config) {
         var isCondition = false;
 
         if (_item.mediaQuery.screenState === testState) {
-          isCondition = true;
+          isCondition = true; //是否锁定到该条件
+
+          if (_item.mediaQuery.lock === true) {
+            window['_a_d_p_d_lockConfig'] = _item;
+          }
         }
 
         if (isCondition) {

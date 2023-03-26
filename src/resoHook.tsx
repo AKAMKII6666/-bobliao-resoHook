@@ -192,6 +192,15 @@ const useReso = function(
           window['_a_d_p_d']['distory']();
         }
       }
+
+      //如果在内存里找到已经缓存好的屏幕状态配置，就直接使用这个配置，不要重新适配
+      if (typeof window['_a_d_p_d_lockConfig'] !== 'undefined') {
+        return makeReso(
+          window['_a_d_p_d_lockConfig'].mediaQuery.config,
+          window['_a_d_p_d_lockConfig'].screenState
+        );
+      }
+
       var result: any = null;
       var findedResoList: Array<Imq> = [];
       for (var i = 0; i < config.queryList.length; i++) {
@@ -199,6 +208,10 @@ const useReso = function(
         var isCondition: boolean = false;
         if (_item.mediaQuery.screenState === testState) {
           isCondition = true;
+          //是否锁定到该条件
+          if (_item.mediaQuery.lock === true) {
+            window['_a_d_p_d_lockConfig'] = _item;
+          }
         }
         if (isCondition) {
           findedResoList.push(_item);

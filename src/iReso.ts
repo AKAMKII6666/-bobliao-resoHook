@@ -135,6 +135,10 @@ export interface Imq {
      */
     screenState: EscreenState;
     /**
+     *是否进入条件后锁定该条件，之后条件再变动也不动?
+     */
+    lock?: boolean;
+    /**
      * 范围控制
      */
     scope?: queryItem;
