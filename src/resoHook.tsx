@@ -166,7 +166,7 @@ const useReso = function(
       _isSetState === true &&
       typeof window['_a_d_p_d_lockConfig'] !== 'undefined'
     ) {
-      setscreenState(window['_a_d_p_d_lockConfig'].screenState);
+      setscreenState(window['_a_d_p_d_lockConfig'].mediaQuery.screenState);
     } else if (_isSetState === true) {
       setscreenState(testState);
     }
@@ -202,7 +202,7 @@ const useReso = function(
       if (typeof window['_a_d_p_d_lockConfig'] !== 'undefined') {
         return makeReso(
           window['_a_d_p_d_lockConfig'].mediaQuery.config,
-          window['_a_d_p_d_lockConfig'].screenState
+          window['_a_d_p_d_lockConfig'].mediaQuery.screenState
         );
       }
 
