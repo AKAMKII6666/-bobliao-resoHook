@@ -155,6 +155,11 @@ const _mobileAdp = function(_options, _mOptions) {
     }
     var clientWidth = window.document.documentElement.clientWidth;
     var windowHeight = window.document.documentElement.clientHeight;
+
+    if (typeof window['_a_d_p_d_lockConfig'] !== 'undefined') {
+      findedResoList = [window['_a_d_p_d_lockConfig']];
+    }
+
     if (findedResoList.length !== 0) {
       if (findedResoList.length === 1) {
         self.rebind(findedResoList[0].mediaQuery.config);
@@ -212,33 +217,35 @@ const _mobileAdp = function(_options, _mOptions) {
             }
           }
 
-          if (clientWidth > windowHeight) {
-            if (
-              typeof _mOptions !== 'undefined' &&
-              _mOptions.hasOwnProperty('queryList')
-            ) {
-              if (self.state !== 'h' && self.state !== '') {
-                self.state = 'h';
-                self.reInit();
-                return;
+          if (typeof window['_a_d_p_d_lockConfig'] === 'undefined') {
+            if (clientWidth > windowHeight) {
+              if (
+                typeof _mOptions !== 'undefined' &&
+                _mOptions.hasOwnProperty('queryList')
+              ) {
+                if (self.state !== 'h' && self.state !== '') {
+                  self.state = 'h';
+                  self.reInit();
+                  return;
+                }
               }
-            }
 
-            self.state = 'h';
-            self.hCallBack(self);
-          } else {
-            if (
-              typeof _mOptions !== 'undefined' &&
-              _mOptions.hasOwnProperty('queryList')
-            ) {
-              if (self.state !== 'v' && self.state !== '') {
-                self.state = 'v';
-                self.reInit();
-                return;
+              self.state = 'h';
+              self.hCallBack(self);
+            } else {
+              if (
+                typeof _mOptions !== 'undefined' &&
+                _mOptions.hasOwnProperty('queryList')
+              ) {
+                if (self.state !== 'v' && self.state !== '') {
+                  self.state = 'v';
+                  self.reInit();
+                  return;
+                }
               }
+              self.state = 'v';
+              self.vCallBack(self);
             }
-            self.state = 'v';
-            self.vCallBack(self);
           }
 
           var compTarget = null;
