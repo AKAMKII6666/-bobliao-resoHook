@@ -156,6 +156,14 @@ const _mobileAdp = function(_options, _mOptions) {
     var clientWidth = window.document.documentElement.clientWidth;
     var windowHeight = window.document.documentElement.clientHeight;
 
+    let getEnd = function(_ed) {
+      if (_ed === -1) {
+        return 9999999999;
+      } else {
+        return _ed;
+      }
+    };
+
     if (typeof window['_a_d_p_d_lockConfig'] !== 'undefined') {
       findedResoList = [window['_a_d_p_d_lockConfig']];
     }
