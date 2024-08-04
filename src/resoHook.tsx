@@ -134,14 +134,6 @@ const useReso = function(
     };
   };
 
-  const getEnd = function(_ed: number): number {
-    if (_ed === -1) {
-      return 9999999999;
-    } else {
-      return _ed;
-    }
-  };
-
   var clientWidth: number = 1920;
   var windowHeight: number = 1080;
   var testState: EscreenState = EscreenState.HORIZONTAL;
@@ -185,6 +177,14 @@ const useReso = function(
     }, []);
     testStateFunc(false);
   }
+
+  let getEnd = function(_ed: number): number {
+    if (_ed === -1) {
+      return 9999999999;
+    } else {
+      return _ed;
+    }
+  };
 
   /**
    * 如果是多条参数适配
