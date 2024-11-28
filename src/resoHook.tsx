@@ -47,6 +47,11 @@ const useReso = function(
     vCallBack: function() {},
     //调整模式
     mode: EresoMode.AUTO,
+    //viewPort配置
+    viewPort: {
+      //auto | config | off
+      mode: 'auto',
+    },
   }
 ): Ireso {
   const $ = useJquery();

@@ -45,7 +45,7 @@ var EscreenState;
 
 /*!
  * mobileAdp.js
- * (c) 2015-2021 bobliao
+ * (c) 2015-2024 bobliao
  * Released under the MIT License.
  */
 
@@ -84,7 +84,18 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
     //height:只通过高度调整
     mode: 'auto',
     //防抖时间
-    debounceTime: 500
+    debounceTime: 500,
+    //viewPort配置
+    viewPort: {
+      //auto | config | off
+      //模式，auto为打开viewport配置，但是自动适配
+      //config为按照配置指定viewport参数
+      //off为关闭
+      mode: 'auto',
+      width: 'device-width',
+      initialScale: '1.0',
+      userScalable: 'yes'
+    }
   }; //拷贝函数
 
   var extend = function extend(target, source) {
@@ -124,7 +135,9 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
 
   this.mode = _options.mode; //指示当前是横屏还是竖屏
 
-  this.state = ''; //初始化
+  this.state = ''; //当前viewPort配置
+
+  this.viewPortSettings = _options.viewPort; //初始化
 
   this.init = function (_callback) {
     //先适配viewPort
@@ -376,7 +389,35 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
 
 
   this.adaptVP = function (d) {
-    var vpObj = document.querySelector("meta[name='viewport']");
+    var vpObj = document.querySelector("meta[name='viewport']"); //关闭viewport适配
+
+    if (this.viewPortSettings.mode === 'off') {
+      if (vpObj !== null) {
+        vpObj.remove();
+      }
+
+      return;
+    } //打开viewPort适配但是手动适配
+
+
+    if (this.viewPortSettings.mode === 'config') {
+      var vpContent = 'width=' + this.viewPortSettings.width + ', initial-scale=' + this.viewPortSettings.initialScale + ',user-scalable=' + this.viewPortSettings.userScalable;
+
+      if (vpObj !== null) {
+        vpObj.content = vpContent;
+      } else {
+        t = document.querySelector("meta[name='viewport']") || document.createElement('meta');
+        t.name = 'viewport';
+        t.content = vpContent;
+        a = document.getElementsByTagName('head');
+
+        if (a.length > 0) {
+          a[0].appendChild(t);
+        }
+      }
+
+      return;
+    }
     /* 
     if (vpObj !== null) {
       var width = '';
@@ -388,10 +429,11 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           break;
         }
       }
-        if (width === d) {
+       if (width === d) {
         return;
       }
     } */
+
 
     function e() {
       var e, i;
@@ -494,7 +536,12 @@ var useReso = function useReso(config) {
       //竖屏回调函数
       vCallBack: function vCallBack() {},
       //调整模式
-      mode: EresoMode.AUTO
+      mode: EresoMode.AUTO,
+      //viewPort配置
+      viewPort: {
+        //auto | config | off
+        mode: 'auto'
+      }
     };
   }
 

@@ -104,6 +104,12 @@ export interface Iconfig {
      * 防抖时间
      */
     debounceTime?: number;
+    viewPort?: {
+        mode?: 'auto' | 'config' | 'off';
+        width?: string;
+        initialScale?: string;
+        userScalable?: 'yes' | 'no';
+    };
 }
 /**
  * 用于分辨率适配器的参数

@@ -1,6 +1,6 @@
 /*!
  * mobileAdp.js
- * (c) 2015-2021 bobliao
+ * (c) 2015-2024 bobliao
  * Released under the MIT License.
  */
 
@@ -41,6 +41,17 @@ const _mobileAdp = function(_options, _mOptions) {
     mode: 'auto',
     //防抖时间
     debounceTime: 500,
+    //viewPort配置
+    viewPort: {
+      //auto | config | off
+      //模式，auto为打开viewport配置，但是自动适配
+      //config为按照配置指定viewport参数
+      //off为关闭
+      mode: 'auto',
+      width: 'device-width',
+      initialScale: '1.0',
+      userScalable: 'yes',
+    },
   };
 
   //拷贝函数
@@ -87,6 +98,9 @@ const _mobileAdp = function(_options, _mOptions) {
 
   //指示当前是横屏还是竖屏
   this.state = '';
+
+  //当前viewPort配置
+  this.viewPortSettings = _options.viewPort;
 
   //初始化
   this.init = function(_callback) {
@@ -339,6 +353,37 @@ const _mobileAdp = function(_options, _mOptions) {
   //最后只找到了这个被压缩后的版本
   this.adaptVP = function(d) {
     var vpObj = document.querySelector("meta[name='viewport']");
+    //关闭viewport适配
+    if (this.viewPortSettings.mode === 'off') {
+      if (vpObj !== null) {
+        vpObj.remove();
+      }
+      return;
+    }
+    //打开viewPort适配但是手动适配
+    if (this.viewPortSettings.mode === 'config') {
+      var vpContent =
+        'width=' +
+        this.viewPortSettings.width +
+        ', initial-scale=' +
+        this.viewPortSettings.initialScale +
+        ',user-scalable=' +
+        this.viewPortSettings.userScalable;
+      if (vpObj !== null) {
+        vpObj.content = vpContent;
+      } else {
+        t =
+          document.querySelector("meta[name='viewport']") ||
+          document.createElement('meta');
+        t.name = 'viewport';
+        t.content = vpContent;
+        a = document.getElementsByTagName('head');
+        if (a.length > 0) {
+          a[0].appendChild(t);
+        }
+      }
+      return;
+    }
     /* 
     if (vpObj !== null) {
       var width = '';

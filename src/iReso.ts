@@ -109,6 +109,17 @@ export interface Iconfig {
    * 防抖时间
    */
   debounceTime?: number;
+  //viewPort配置
+  viewPort?: {
+    //auto | config | off
+    //模式，auto为打开viewport配置，但是自动适配
+    //config为按照配置指定viewport参数
+    //off为关闭
+    mode?: 'auto' | 'config' | 'off';
+    width?: string;
+    initialScale?: string;
+    userScalable?: 'yes' | 'no';
+  };
 }
 
 /**
