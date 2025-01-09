@@ -120,6 +120,8 @@ export interface Iconfig {
     initialScale?: string;
     userScalable?: 'yes' | 'no';
   };
+  //是否根据浏览器的缩放设置调整大小
+  is_relate_with_devicePixelRatio?: boolean;
 }
 
 /**

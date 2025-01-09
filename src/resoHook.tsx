@@ -52,6 +52,7 @@ const useReso = function(
       //auto | config | off
       mode: 'auto',
     },
+    is_relate_with_devicePixelRatio: false,
   }
 ): Ireso {
   const $ = useJquery();

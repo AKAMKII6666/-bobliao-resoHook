@@ -103,7 +103,9 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
       width: 'device-width',
       initialScale: '1.0',
       userScalable: 'yes'
-    }
+    },
+    //是否根据浏览器的缩放设置调整大小
+    is_relate_with_devicePixelRatio: false
   }; //拷贝函数
 
   var extend = function extend(target, source) {
@@ -141,7 +143,8 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   //width:只通过宽度调整
   //height:只通过高度调整,
 
-  this.mode = _options.mode; //指示当前是横屏还是竖屏
+  this.mode = _options.mode;
+  this.is_relate_with_devicePixelRatio = _options.is_relate_with_devicePixelRatio; //指示当前是横屏还是竖屏
 
   this.state = ''; //当前viewPort配置
 
@@ -338,9 +341,10 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           adWidth();
         } else if (self.mode === 'height') {
           adHeight();
-        }
+        } //在计算过程中，加入页面缩放的数值
 
-        document.documentElement.style.fontSize = res.toFixed(1) + 'px';
+
+        document.documentElement.style.fontSize = (res * getDevicePixelRatio()).toFixed(1) + 'px';
         self.computedFontSize = Number(res.toFixed(1));
       };
 
@@ -367,9 +371,21 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   };
 
   this.debounceTimeOut = null;
+  /* 
+  用于计算当前显示比例和浏览器放大倍率的关联 
+  */
+
+  this.getDevicePixelRatio = function () {
+    if (this.is_relate_with_devicePixelRatio && typeof window.devicePixelRatio !== 'undefined') {
+      return Number(window.devicePixelRatio);
+    }
+
+    return 1;
+  };
   /**
    * 设置字体大小的时候进行防抖处理
    *  */
+
 
   this.debounceSetFontSize = function (_recalc) {
     if (this.debounceTimeOut !== null) {
@@ -437,7 +453,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           break;
         }
       }
-       if (width === d) {
+        if (width === d) {
         return;
       }
     } */
@@ -549,7 +565,8 @@ var useReso = function useReso(config) {
       viewPort: {
         //auto | config | off
         mode: 'auto'
-      }
+      },
+      is_relate_with_devicePixelRatio: false
     };
   }
 

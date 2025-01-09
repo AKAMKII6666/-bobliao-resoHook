@@ -110,6 +110,7 @@ export interface Iconfig {
         initialScale?: string;
         userScalable?: 'yes' | 'no';
     };
+    is_relate_with_devicePixelRatio?: boolean;
 }
 /**
  * 用于分辨率适配器的参数
