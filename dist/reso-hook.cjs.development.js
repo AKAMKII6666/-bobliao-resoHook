@@ -380,7 +380,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
 
   this.getDevicePixelRatio = function () {
     if (this.is_relate_with_devicePixelRatio && typeof window !== 'undefined' && typeof window.devicePixelRatio !== 'undefined') {
-      return Number(window.devicePixelRatio);
+      return Number((window.outerWidth / window.innerWidth).toFixed(2));
     }
 
     return 1;
