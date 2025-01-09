@@ -118,7 +118,8 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   //单位像素
 
   this.fontSize = _options.fontSize;
-  this.computedFontSize = 0; //设计稿宽度
+  this.computedFontSize = 0;
+  this.orgFontSize_widthOutRatoComput = 0; //设计稿宽度
 
   this.designWidth = _options.designWidth; //设计稿高度
 
@@ -333,11 +334,13 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           adWidth();
         } else if (self.mode === 'height') {
           adHeight();
-        } //在计算过程中，加入页面缩放的数值
+        }
 
+        var fSize = Number((res * self.getDevicePixelRatio()).toFixed(1)); //在计算过程中，加入页面缩放的数值
 
-        document.documentElement.style.fontSize = (res * getDevicePixelRatio()).toFixed(1) + 'px';
-        self.computedFontSize = Number(res.toFixed(1));
+        document.documentElement.style.fontSize = fSize + 'px';
+        self.computedFontSize = fSize;
+        self.orgFontSize_widthOutRatoComput = Number(res.toFixed(1));
       };
 
       var resizeF = function resizeF() {
@@ -368,7 +371,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   */
 
   this.getDevicePixelRatio = function () {
-    if (this.is_relate_with_devicePixelRatio && typeof window.devicePixelRatio !== 'undefined') {
+    if (this.is_relate_with_devicePixelRatio && typeof window !== 'undefined' && typeof window.devicePixelRatio !== 'undefined') {
       return Number(window.devicePixelRatio);
     }
 
@@ -618,7 +621,15 @@ var useReso = function useReso(config) {
       screenState: screenState,
       width: mobileAdp.designWidth,
       height: mobileAdp.designHeight,
-      fontSize: mobileAdp.computedFontSize
+      fontSize: mobileAdp.computedFontSize,
+      fontSize_org: mobileAdp.orgFontSize_widthOutRatoComput,
+      current_pixRato: function () {
+        if (isRunningInServer) {
+          return 1;
+        } else {
+          return mobileAdp.getDevicePixelRatio();
+        }
+      }()
     };
   };
 

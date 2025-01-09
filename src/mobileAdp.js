@@ -345,7 +345,7 @@ const _mobileAdp = function(_options, _mOptions) {
       typeof window !== 'undefined' &&
       typeof window.devicePixelRatio !== 'undefined'
     ) {
-      return Number(window.devicePixelRatio);
+      return Number((window.outerWidth / window.innerWidth).toFixed(2));
     }
     return 1;
   };

@@ -18,7 +18,7 @@
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why",
-    "public": "npm login && npm version patch && npm publish --access public"
+    "public": "tsdx build && npm version patch && npm publish --access public"
   },
   "peerDependencies": {
     "react": ">=16"
