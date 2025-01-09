@@ -137,6 +137,14 @@ const useReso = function(
       width: mobileAdp.designWidth,
       height: mobileAdp.designHeight,
       fontSize: mobileAdp.computedFontSize,
+      fontSize_org: mobileAdp.orgFontSize_widthOutRatoComput,
+      current_pixRato: (function() {
+        if (isRunningInServer) {
+          return 1;
+        } else {
+          return mobileAdp.getDevicePixelRatio();
+        }
+      })(),
     };
   };
 

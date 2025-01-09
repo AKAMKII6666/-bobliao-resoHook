@@ -75,6 +75,7 @@ const _mobileAdp = function(_options, _mOptions) {
   //单位像素
   this.fontSize = _options.fontSize;
   this.computedFontSize = 0;
+  this.orgFontSize_widthOutRatoComput = 0;
   //设计稿宽度
   this.designWidth = _options.designWidth;
   //设计稿高度
@@ -308,10 +309,11 @@ const _mobileAdp = function(_options, _mOptions) {
             adHeight();
           }
 
+          var fSize = Number((res * self.getDevicePixelRatio()).toFixed(1));
           //在计算过程中，加入页面缩放的数值
-          document.documentElement.style.fontSize =
-            (res * getDevicePixelRatio()).toFixed(1) + 'px';
-          self.computedFontSize = Number(res.toFixed(1));
+          document.documentElement.style.fontSize = fSize + 'px';
+          self.computedFontSize = fSize;
+          self.orgFontSize_widthOutRatoComput = Number(res.toFixed(1));
         };
 
       let resizeF = function() {
@@ -340,6 +342,7 @@ const _mobileAdp = function(_options, _mOptions) {
   this.getDevicePixelRatio = function() {
     if (
       this.is_relate_with_devicePixelRatio &&
+      typeof window !== 'undefined' &&
       typeof window.devicePixelRatio !== 'undefined'
     ) {
       return Number(window.devicePixelRatio);
