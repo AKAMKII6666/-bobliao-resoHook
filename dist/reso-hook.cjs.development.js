@@ -103,7 +103,9 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
       width: 'device-width',
       initialScale: '1.0',
       userScalable: 'yes'
-    }
+    },
+    //是否根据浏览器的缩放设置调整大小
+    is_relate_with_devicePixelRatio: false
   }; //拷贝函数
 
   var extend = function extend(target, source) {
@@ -124,7 +126,8 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   //单位像素
 
   this.fontSize = _options.fontSize;
-  this.computedFontSize = 0; //设计稿宽度
+  this.computedFontSize = 0;
+  this.orgFontSize_widthOutRatoComput = 0; //设计稿宽度
 
   this.designWidth = _options.designWidth; //设计稿高度
 
@@ -141,7 +144,8 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   //width:只通过宽度调整
   //height:只通过高度调整,
 
-  this.mode = _options.mode; //指示当前是横屏还是竖屏
+  this.mode = _options.mode;
+  this.is_relate_with_devicePixelRatio = _options.is_relate_with_devicePixelRatio; //指示当前是横屏还是竖屏
 
   this.state = ''; //当前viewPort配置
 
@@ -340,8 +344,11 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           adHeight();
         }
 
-        document.documentElement.style.fontSize = res.toFixed(1) + 'px';
-        self.computedFontSize = Number(res.toFixed(1));
+        var fSize = Number((res * self.getDevicePixelRatio()).toFixed(1)); //在计算过程中，加入页面缩放的数值
+
+        document.documentElement.style.fontSize = fSize + 'px';
+        self.computedFontSize = fSize;
+        self.orgFontSize_widthOutRatoComput = Number(res.toFixed(1));
       };
 
       var resizeF = function resizeF() {
@@ -367,9 +374,21 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   };
 
   this.debounceTimeOut = null;
+  /* 
+  用于计算当前显示比例和浏览器放大倍率的关联 
+  */
+
+  this.getDevicePixelRatio = function () {
+    if (this.is_relate_with_devicePixelRatio && typeof window !== 'undefined' && typeof window.devicePixelRatio !== 'undefined') {
+      return Number((window.outerWidth / window.innerWidth).toFixed(2));
+    }
+
+    return 1;
+  };
   /**
    * 设置字体大小的时候进行防抖处理
    *  */
+
 
   this.debounceSetFontSize = function (_recalc) {
     if (this.debounceTimeOut !== null) {
@@ -437,7 +456,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           break;
         }
       }
-       if (width === d) {
+        if (width === d) {
         return;
       }
     } */
@@ -549,7 +568,8 @@ var useReso = function useReso(config) {
       viewPort: {
         //auto | config | off
         mode: 'auto'
-      }
+      },
+      is_relate_with_devicePixelRatio: false
     };
   }
 
@@ -609,7 +629,15 @@ var useReso = function useReso(config) {
       screenState: screenState,
       width: mobileAdp.designWidth,
       height: mobileAdp.designHeight,
-      fontSize: mobileAdp.computedFontSize
+      fontSize: mobileAdp.computedFontSize,
+      fontSize_org: mobileAdp.orgFontSize_widthOutRatoComput,
+      current_pixRato: function () {
+        if (useJquery.isRunningInServer) {
+          return 1;
+        } else {
+          return mobileAdp.getDevicePixelRatio();
+        }
+      }()
     };
   };
 
