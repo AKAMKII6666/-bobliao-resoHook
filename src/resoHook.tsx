@@ -52,6 +52,7 @@ const useReso = function(
       //auto | config | off
       mode: 'auto',
     },
+    is_relate_with_devicePixelRatio: false,
   }
 ): Ireso {
   const $ = useJquery();
@@ -79,7 +80,7 @@ const useReso = function(
       }
       mobileAdp.init();
     } else {
-      let UglifyJS = require('uglify-js');
+      /* let UglifyJS = require('uglify-js'); */
       var codeString = codeStringify(___mobileAdp);
 
       scrStr =
@@ -121,8 +122,8 @@ const useReso = function(
                                 window._a_d_p_d.init();
                             }
                         `;
-      let code = { 'reso.js': scrStr };
-      scrStr = UglifyJS.minify(code).code;
+      /*       let code = { 'reso.js': scrStr };
+      scrStr = UglifyJS.minify(code).code; */
       injectElements = <script id="_a_d_p_">{scrStr}</script>;
       //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
       //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
@@ -136,6 +137,14 @@ const useReso = function(
       width: mobileAdp.designWidth,
       height: mobileAdp.designHeight,
       fontSize: mobileAdp.computedFontSize,
+      fontSize_org: mobileAdp.orgFontSize_widthOutRatoComput,
+      current_pixRato: (function() {
+        if (isRunningInServer) {
+          return 1;
+        } else {
+          return mobileAdp.getDevicePixelRatio();
+        }
+      })(),
     };
   };
 

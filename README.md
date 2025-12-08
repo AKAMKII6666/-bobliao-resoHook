@@ -536,6 +536,22 @@ export interface Iconfig {
    * 防抖时间
    */
   debounceTime?: number;
+//viewPort配置
+  viewPort?: {
+    //auto | config | off
+    //模式，auto为打开viewport配置，但是自动适配
+    //config为按照配置指定viewport参数
+    //off为关闭,也就是不向页面写入viewPort标签和配置
+    mode?: 'auto' | 'config' | 'off';
+    width?: string;
+    initialScale?: string;
+    userScalable?: 'yes' | 'no';
+  };
+  //是否根据浏览器的缩放设置调整大小
+  //设置为true 当用于通过ctrl加滚轮的方式进行页面比
+  //例大小调整时，页面比例将随之缩放
+  //设置为false,页面比例将永远固定。
+  is_relate_with_devicePixelRatio?: boolean;
 }
 ```
 

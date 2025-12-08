@@ -52,6 +52,8 @@ const _mobileAdp = function(_options, _mOptions) {
       initialScale: '1.0',
       userScalable: 'yes',
     },
+    //是否根据浏览器的缩放设置调整大小
+    is_relate_with_devicePixelRatio: false,
   };
 
   //拷贝函数
@@ -73,6 +75,7 @@ const _mobileAdp = function(_options, _mOptions) {
   //单位像素
   this.fontSize = _options.fontSize;
   this.computedFontSize = 0;
+  this.orgFontSize_widthOutRatoComput = 0;
   //设计稿宽度
   this.designWidth = _options.designWidth;
   //设计稿高度
@@ -95,6 +98,9 @@ const _mobileAdp = function(_options, _mOptions) {
   //width:只通过宽度调整
   //height:只通过高度调整,
   this.mode = _options.mode;
+
+  this.is_relate_with_devicePixelRatio =
+    _options.is_relate_with_devicePixelRatio;
 
   //指示当前是横屏还是竖屏
   this.state = '';
@@ -302,8 +308,12 @@ const _mobileAdp = function(_options, _mOptions) {
           } else if (self.mode === 'height') {
             adHeight();
           }
-          document.documentElement.style.fontSize = res.toFixed(1) + 'px';
-          self.computedFontSize = Number(res.toFixed(1));
+
+          var fSize = Number((res * self.getDevicePixelRatio()).toFixed(1));
+          //在计算过程中，加入页面缩放的数值
+          document.documentElement.style.fontSize = fSize + 'px';
+          self.computedFontSize = fSize;
+          self.orgFontSize_widthOutRatoComput = Number(res.toFixed(1));
         };
 
       let resizeF = function() {
@@ -325,6 +335,20 @@ const _mobileAdp = function(_options, _mOptions) {
   };
 
   this.debounceTimeOut = null;
+
+  /* 
+ 	用于计算当前显示比例和浏览器放大倍率的关联 
+  */
+  this.getDevicePixelRatio = function() {
+    if (
+      this.is_relate_with_devicePixelRatio &&
+      typeof window !== 'undefined' &&
+      typeof window.devicePixelRatio !== 'undefined'
+    ) {
+      return Number((window.outerWidth / window.innerWidth).toFixed(2));
+    }
+    return 1;
+  };
 
   /**
    * 设置字体大小的时候进行防抖处理
