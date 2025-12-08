@@ -3,6 +3,24 @@ import useJquery, { isRunningInServer } from '@bobliao/use-jquery-hook';
 import { Helmet } from 'react-helmet';
 import codeStringify from 'code-stringify';
 
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
 /**
  * 设置分辨率适配器的工作模式
  */
@@ -448,7 +466,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           break;
         }
       }
-       if (width === d) {
+        if (width === d) {
         return;
       }
     } */
@@ -697,45 +715,90 @@ var _mobileAdp$1 = function _mobileAdp(e, i) {
 };
 
 /**
- * 本文件为分辨率适配钩子
- * 廖力编写 2022/03/28
- */
-/**
  * 创建一个需要全局使用的context
  **/
 
 var resoContext = /*#__PURE__*/createContext({});
+/**
+ * 默认配置
+ */
+
+var defaultConfig = {
+  //页面字体基准是14像素
+  fontSize: 14,
+  //设计稿宽度/高度
+  designWidth: 1360,
+  designHeight: 755,
+  //缩放限制参数
+  //用于限制页面的缩放大小
+  scaleLimit: {
+    enable: false,
+    maxWidth: 1360,
+    minWidth: 800,
+    maxHeight: 755,
+    minHeight: 600
+  },
+  //横屏回调函数
+  hCallBack: function hCallBack() {},
+  //竖屏回调函数
+  vCallBack: function vCallBack() {},
+  //调整模式
+  mode: EresoMode.AUTO,
+  //viewPort配置
+  viewPort: {
+    //auto | config | off
+    mode: 'auto'
+  },
+  is_relate_with_devicePixelRatio: false
+};
+/* 服务器渲染版本 */
+
+var resoForServer = function resoForServer(config) {
+  if (config === void 0) {
+    config = _extends({}, defaultConfig);
+  }
+
+  /**
+   * 适配
+   */
+  var makeReso = function makeReso(_config, _testState) {
+    var mobileAdp = new _mobileAdp(_config, config);
+    var helTags;
+    var injectElements;
+    var scrStr = '';
+    var codeString = codeStringify(_mobileAdp$1);
+    scrStr = " window.__m_adp__ = " + codeString + ";var _adp_config = " + JSON.stringify(config) + ";if(_adp_config.hasOwnProperty(\"queryList\")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState=\"h\";testState=clientWidth>windowHeight?\"h\":\"v\";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();";
+    injectElements = React.createElement("script", {
+      id: "_a_d_p_"
+    }, scrStr);
+    scrStr = scrStr.replace(/[\r\n]/g, ''); //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
+    //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
+    //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
+
+    helTags = React.createElement(Helmet, null, injectElements);
+    return {
+      data: {
+        helTags: helTags,
+        elemsnts: injectElements,
+        scriptStr: scrStr
+      },
+      funcs: mobileAdp,
+      screenState: EscreenState.HORIZONTAL,
+      width: mobileAdp.designWidth,
+      height: mobileAdp.designHeight,
+      fontSize: mobileAdp.computedFontSize,
+      fontSize_org: mobileAdp.orgFontSize_widthOutRatoComput,
+      current_pixRato: 1
+    };
+  };
+
+  return makeReso(config);
+};
+/* 客户端渲染版本 */
 
 var useReso = function useReso(config) {
   if (config === void 0) {
-    config = {
-      //页面字体基准是14像素
-      fontSize: 14,
-      //设计稿宽度/高度
-      designWidth: 1360,
-      designHeight: 755,
-      //缩放限制参数
-      //用于限制页面的缩放大小
-      scaleLimit: {
-        enable: false,
-        maxWidth: 1360,
-        minWidth: 800,
-        maxHeight: 755,
-        minHeight: 600
-      },
-      //横屏回调函数
-      hCallBack: function hCallBack() {},
-      //竖屏回调函数
-      vCallBack: function vCallBack() {},
-      //调整模式
-      mode: EresoMode.AUTO,
-      //viewPort配置
-      viewPort: {
-        //auto | config | off
-        mode: 'auto'
-      },
-      is_relate_with_devicePixelRatio: false
-    };
+    config = _extends({}, defaultConfig);
   }
 
   var $ = useJquery();
@@ -765,22 +828,23 @@ var useReso = function useReso(config) {
       }
 
       mobileAdp.init();
-    }
-    /* let UglifyJS = require('uglify-js'); */
-
-
-    var codeString = codeStringify(_mobileAdp$1);
-    scrStr = " window.__m_adp__ = " + codeString + ";var _adp_config = " + JSON.stringify(config) + ";if(_adp_config.hasOwnProperty(\"queryList\")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState=\"h\";testState=clientWidth>windowHeight?\"h\":\"v\";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();";
-    /*       let code = { 'reso.js': scrStr };
+    } else {
+      /* let UglifyJS = require('uglify-js'); */
+      var codeString = codeStringify(_mobileAdp$1);
+      scrStr = " window.__m_adp__ = " + codeString + ";var _adp_config = " + JSON.stringify(config) + ";if(_adp_config.hasOwnProperty(\"queryList\")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState=\"h\";testState=clientWidth>windowHeight?\"h\":\"v\";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();";
+      /*       let code = { 'reso.js': scrStr };
       scrStr = UglifyJS.minify(code).code; */
 
-    injectElements = React.createElement("script", {
-      id: "_a_d_p_"
-    }, scrStr); //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
-    //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
-    //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
+      scrStr = scrStr.replace(/[\r\n]/g, '');
+      injectElements = React.createElement("script", {
+        id: "_a_d_p_"
+      }, scrStr); //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
+      //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
+      //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
 
-    helTags = React.createElement(Helmet, null, injectElements);
+      helTags = React.createElement(Helmet, null, injectElements);
+    }
+
     return {
       data: {
         helTags: helTags,
@@ -970,5 +1034,5 @@ var EresoMode$1;
   EresoMode["HEIGHT"] = "height";
 })(EresoMode$1 || (EresoMode$1 = {}));
 
-export { EresoMode$1 as EresoMode, EscreenState$1 as EscreenState, _mobileAdp, resoContext, useReso, useResoContext };
+export { EresoMode$1 as EresoMode, EscreenState$1 as EscreenState, _mobileAdp, resoContext, resoForServer, useReso, useResoContext };
 //# sourceMappingURL=reso-hook.esm.js.map

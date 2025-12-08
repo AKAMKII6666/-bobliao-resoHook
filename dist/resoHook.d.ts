@@ -10,6 +10,7 @@ export declare type config = Iconfig | IconfigMutiple;
  * 创建一个需要全局使用的context
  **/
 declare const resoContext: React.Context<Ireso>;
+export declare const resoForServer: (config?: config) => Ireso;
 declare const useReso: (config?: config) => Ireso;
 declare let useResoContext: () => Ireso;
 export { useReso as default, _mobileAdp, resoContext, useResoContext };
