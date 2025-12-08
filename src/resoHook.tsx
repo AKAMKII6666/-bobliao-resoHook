@@ -13,6 +13,7 @@ import {
   EscreenState,
 } from './iReso';
 import { _mobileAdp } from './mobileAdp';
+import { _mobileAdp as _mobileAdpMin } from './mobileAdp_min';
 import useJquery, { isRunningInServer } from '@bobliao/use-jquery-hook';
 import { Helmet } from 'react-helmet';
 //import requireContext from 'require-context.macro';
@@ -66,7 +67,6 @@ const useReso = function(
   const makeReso = function(_config, _testState) {
     //let context = requireContext("../nativeComs/", false, /mobileAdp.js/);
     //let modul = context("./mobileAdp.js");
-    let ___mobileAdp = _mobileAdp;
     let mobileAdp: any = new _mobileAdp(_config, config);
     let helTags: ReactElement;
     let injectElements: ReactElement;
@@ -81,47 +81,14 @@ const useReso = function(
       mobileAdp.init();
     }
     /* let UglifyJS = require('uglify-js'); */
-    var codeString = codeStringify(___mobileAdp);
+    var codeString = codeStringify(_mobileAdpMin);
 
     scrStr =
-      `
-                            window.__m_adp__ = ` +
+      ` window.__m_adp__ = ` +
       codeString +
-      `;
-
-                            var _adp_config = ` +
+      `;var _adp_config = ` +
       JSON.stringify(config) +
-      `;
-                            
-                            if (_adp_config.hasOwnProperty("queryList")) {
-                                var clientWidth = window.document.documentElement.clientWidth;
-                                var windowHeight = window.document.documentElement.clientHeight;
-                                var testState = "h";
-                                if (clientWidth > windowHeight) {
-                                    testState = "h";
-                                } else {
-                                    testState = "v";
-                                }
-                                for (var i = 0; i < _adp_config.queryList.length; i++) {
-                                    var _item = _adp_config.queryList[i];
-                                    var _index = i;
-                                    var isCondition = false;
-                                    if (_item.mediaQuery.screenState === testState) {
-                                        isCondition = true;
-                                    }
-                                    if (isCondition) {
-										_item.mediaQuery.config.debounceTime = 0;
-                                        window._a_d_p_d = new __m_adp__(_item.mediaQuery.config,_adp_config);
-                                        window._a_d_p_d.init();
-                                        break;
-                                    }
-                                }
-                            }else{
-								_adp_config.debounceTime = 0;
-                                window._a_d_p_d = new __m_adp__(_adp_config);
-                                window._a_d_p_d.init();
-                            }
-                        `;
+      `;if(_adp_config.hasOwnProperty("queryList")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState="h";testState=clientWidth>windowHeight?"h":"v";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();`;
     /*       let code = { 'reso.js': scrStr };
       scrStr = UglifyJS.minify(code).code; */
     injectElements = <script id="_a_d_p_">{scrStr}</script>;
