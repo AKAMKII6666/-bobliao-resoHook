@@ -601,22 +601,22 @@ var useReso = function useReso(config) {
       }
 
       mobileAdp.init();
-    } else {
-      /* let UglifyJS = require('uglify-js'); */
-      var codeString = codeStringify(___mobileAdp);
-      scrStr = "\n                            window.__m_adp__ = " + codeString + ";\n\n                            var _adp_config = " + JSON.stringify(config) + ";\n                            \n                            if (_adp_config.hasOwnProperty(\"queryList\")) {\n                                var clientWidth = window.document.documentElement.clientWidth;\n                                var windowHeight = window.document.documentElement.clientHeight;\n                                var testState = \"h\";\n                                if (clientWidth > windowHeight) {\n                                    testState = \"h\";\n                                } else {\n                                    testState = \"v\";\n                                }\n                                for (var i = 0; i < _adp_config.queryList.length; i++) {\n                                    var _item = _adp_config.queryList[i];\n                                    var _index = i;\n                                    var isCondition = false;\n                                    if (_item.mediaQuery.screenState === testState) {\n                                        isCondition = true;\n                                    }\n                                    if (isCondition) {\n\t\t\t\t\t\t\t\t\t\t_item.mediaQuery.config.debounceTime = 0;\n                                        window._a_d_p_d = new __m_adp__(_item.mediaQuery.config,_adp_config);\n                                        window._a_d_p_d.init();\n                                        break;\n                                    }\n                                }\n                            }else{\n\t\t\t\t\t\t\t\t_adp_config.debounceTime = 0;\n                                window._a_d_p_d = new __m_adp__(_adp_config);\n                                window._a_d_p_d.init();\n                            }\n                        ";
-      /*       let code = { 'reso.js': scrStr };
+    }
+    /* let UglifyJS = require('uglify-js'); */
+
+
+    var codeString = codeStringify(___mobileAdp);
+    scrStr = "\n                            window.__m_adp__ = " + codeString + ";\n\n                            var _adp_config = " + JSON.stringify(config) + ";\n                            \n                            if (_adp_config.hasOwnProperty(\"queryList\")) {\n                                var clientWidth = window.document.documentElement.clientWidth;\n                                var windowHeight = window.document.documentElement.clientHeight;\n                                var testState = \"h\";\n                                if (clientWidth > windowHeight) {\n                                    testState = \"h\";\n                                } else {\n                                    testState = \"v\";\n                                }\n                                for (var i = 0; i < _adp_config.queryList.length; i++) {\n                                    var _item = _adp_config.queryList[i];\n                                    var _index = i;\n                                    var isCondition = false;\n                                    if (_item.mediaQuery.screenState === testState) {\n                                        isCondition = true;\n                                    }\n                                    if (isCondition) {\n\t\t\t\t\t\t\t\t\t\t_item.mediaQuery.config.debounceTime = 0;\n                                        window._a_d_p_d = new __m_adp__(_item.mediaQuery.config,_adp_config);\n                                        window._a_d_p_d.init();\n                                        break;\n                                    }\n                                }\n                            }else{\n\t\t\t\t\t\t\t\t_adp_config.debounceTime = 0;\n                                window._a_d_p_d = new __m_adp__(_adp_config);\n                                window._a_d_p_d.init();\n                            }\n                        ";
+    /*       let code = { 'reso.js': scrStr };
       scrStr = UglifyJS.minify(code).code; */
 
-      injectElements = React__default.createElement("script", {
-        id: "_a_d_p_"
-      }, scrStr); //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
-      //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
-      //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
+    injectElements = React__default.createElement("script", {
+      id: "_a_d_p_"
+    }, scrStr); //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
+    //如果这里不进行适配,那么在网页加载的第一时间,客户端代码还没注入的时候,页面将会抽搐一下,
+    //等客户端代码完全运行完成后,页面分辨率才会被适配到适合的样子,加入这段代码后,页面在到达浏览器的第一时间就可以开始适配的分辨率
 
-      helTags = React__default.createElement(reactHelmet.Helmet, null, injectElements);
-    }
-
+    helTags = React__default.createElement(reactHelmet.Helmet, null, injectElements);
     return {
       data: {
         helTags: helTags,
