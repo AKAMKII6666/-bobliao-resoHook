@@ -9,7 +9,6 @@ var React__default = _interopDefault(React);
 var useJquery = require('@bobliao/use-jquery-hook');
 var useJquery__default = _interopDefault(useJquery);
 var reactHelmet = require('react-helmet');
-var codeStringify = _interopDefault(require('code-stringify'));
 
 function _extends() {
   _extends = Object.assign || function (target) {
@@ -474,7 +473,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
           break;
         }
       }
-        if (width === d) {
+       if (width === d) {
         return;
       }
     } */
@@ -549,178 +548,7 @@ var _mobileAdp = function _mobileAdp(_options, _mOptions) {
   };
 };
 
-var _mobileAdp$1 = function _mobileAdp(e, i) {
-  var t = this;
-  this.defaultOptions = {
-    fontSize: 14,
-    designWidth: 1360,
-    designHeight: 755,
-    scaleLimit: {
-      enable: !1,
-      maxWidth: 1360,
-      minWidth: 800,
-      maxHeight: 755,
-      minHeight: 600
-    },
-    hCallBack: function hCallBack() {},
-    vCallBack: function vCallBack() {},
-    mode: "auto",
-    debounceTime: 500,
-    viewPort: {
-      mode: "auto",
-      width: "device-width",
-      initialScale: "1.0",
-      userScalable: "yes"
-    },
-    is_relate_with_devicePixelRatio: !1
-  };
-
-  var n = function n(e, i) {
-    for (var t in e = e || {}, i) {
-      "object" == typeof i[t] ? e[t] = n(e[t], i[t]) : e[t] = i[t];
-    }
-
-    return e;
-  };
-
-  e = n(this.defaultOptions, e), this.fontSize = e.fontSize, this.computedFontSize = 0, this.orgFontSize_widthOutRatoComput = 0, this.designWidth = e.designWidth, this.designHeight = e.designHeight, this.hCallBack = e.hCallBack, this.vCallBack = e.vCallBack, this.scaleLimit = e.scaleLimit, this.debounceTime = e.debounceTime, this.mode = e.mode, this.is_relate_with_devicePixelRatio = e.is_relate_with_devicePixelRatio, this.state = "", this.viewPortSettings = e.viewPort, this.init = function (e) {
-    this.adaptVP({
-      uWidth: this.designWidth
-    }), this.adpRem(), void 0 !== e && e();
-  }, this.rebind = function (e, i) {
-    e = n(this.defaultOptions, e), this.fontSize = e.fontSize, this.designWidth = e.designWidth, this.designHeight = e.designHeight, this.hCallBack = e.hCallBack, this.vCallBack = e.vCallBack, this.scaleLimit = e.scaleLimit, this.mode = e.mode, this.state = "", this.init(function () {
-      "undefined" != typeof _callback && i();
-    });
-  }, this.reInit = function () {
-    for (var e = [], n = 0; n < i.queryList.length; n++) {
-      var d = i.queryList[n],
-          o = !1;
-      d.mediaQuery.screenState === t.state && (o = !0), o && e.push(d);
-    }
-    var a = window.document.documentElement.clientWidth,
-        s = window.document.documentElement.clientHeight;
-
-    var h = function h(e) {
-      return -1 === e ? 9999999999 : e;
-    };
-
-    if (void 0 !== window._a_d_p_d_lockConfig && (e = [window._a_d_p_d_lockConfig]), 0 !== e.length) if (1 === e.length) t.rebind(e[0].mediaQuery.config);else {
-      var l = null;
-
-      for (n = 0; n < e.length; n++) {
-        var r = e[n];
-
-        if (void 0 !== r.mediaQuery.scope) {
-          if (r.mediaQuery.scope.startWidth <= a && h(r.mediaQuery.scope.endWidth) > a && r.mediaQuery.scope.startHeight <= s && h(r.mediaQuery.scope.endHeight) > s) {
-            l = r;
-            break;
-          }
-        } else l = r;
-      }
-
-      t.rebind(l.mediaQuery.config);
-    }
-  }, this.adpRem = function () {
-    !function (e, n) {
-      var d = e.documentElement,
-          o = "orientationchange" in window ? "orientationchange" : "resize",
-          a = function a() {
-        var e = d.clientWidth,
-            n = d.clientHeight;
-        if (!0 === t.scaleLimit.enable && (e > t.scaleLimit.maxWidth && (e = t.scaleLimit.maxWidth), e < t.scaleLimit.minWidth && (e = t.scaleLimit.minWidth), n > t.scaleLimit.maxHeight && (n = t.scaleLimit.maxHeight), n < t.scaleLimit.minHeight && (n = t.scaleLimit.minHeight)), void 0 === window._a_d_p_d_lockConfig) if (e > n) {
-          if (void 0 !== i && i.hasOwnProperty("queryList") && "h" !== t.state && "" !== t.state) return t.state = "h", void t.reInit();
-          t.state = "h", t.hCallBack(t);
-        } else {
-          if (void 0 !== i && i.hasOwnProperty("queryList") && "v" !== t.state && "" !== t.state) return t.state = "v", void t.reInit();
-          t.state = "v", t.vCallBack(t);
-        }
-        var o = null;
-
-        if (e) {
-          var a = t.designWidth / t.designHeight,
-              s = e / n,
-              h = 0,
-              l = function l() {
-            o = e, h = t.fontSize * (o / t.designWidth);
-          },
-              r = function r() {
-            o = n, h = t.fontSize * (o / t.designHeight);
-          };
-
-          "auto" === t.mode ? a < s ? r() : l() : "width" === t.mode ? l() : "height" === t.mode && r();
-          var c = Number((h * t.getDevicePixelRatio()).toFixed(1));
-          document.documentElement.style.fontSize = c + "px", t.computedFontSize = c, t.orgFontSize_widthOutRatoComput = Number(h.toFixed(1));
-        }
-      };
-
-      var s = function s() {
-        t.debounceSetFontSize(a);
-      };
-
-      e.addEventListener && (n.addEventListener(o, s, !1), e.addEventListener("DOMContentLoaded", s, !1), t.distory = function () {
-        clearTimeout(t.debounceTimeOut), n.removeEventListener(o, s), e.removeEventListener("DOMContentLoaded", s);
-      }, s());
-    }(document, window);
-  }, this.debounceTimeOut = null, this.getDevicePixelRatio = function () {
-    return this.is_relate_with_devicePixelRatio && "undefined" != typeof window && void 0 !== window.devicePixelRatio ? Number((window.outerWidth / window.innerWidth).toFixed(2)) : 1;
-  }, this.debounceSetFontSize = function (e) {
-    null !== this.debounceTimeOut && clearTimeout(this.debounceTimeOut), this.debounceTime <= 0 ? e() : (null === this.debounceTimeOut && e(), this.debounceTimeOut = setTimeout(function () {
-      e(), t.debounceTimeOut = null;
-    }, this.debounceTime));
-  }, this.adaptVP = function (e) {
-    var i = document.querySelector("meta[name='viewport']");
-    if ("off" !== this.viewPortSettings.mode) {
-      if ("config" !== this.viewPortSettings.mode) {
-        if (e) {
-          var n = {
-            uWidth: 0,
-            dWidth: 0,
-            ratio: 1,
-            mode: "apple",
-            userAgent: null,
-            bConsole: !1
-          };
-          n.uWidth = e.uWidth ? e.uWidth : 640, n.dWidth = e.dWidth ? e.dWidth : window.screen.width || window.screen.availWidth, n.ratio = window.devicePixelRatio ? window.devicePixelRatio : 1, n.userAgent = navigator.userAgent, n.bConsole = !!e.bConsole && e.bConsole, e.mode ? n.mode = e.mode : n.userAgent.match(/Android/i) && (n.mode = "android-2.2", (d = n.userAgent.match(/Android\s(\d+.\d+)/i)) && (d = parseFloat(d[1])), 2.2 == d || 2.3 == d ? n.mode = "android-2.2" : 4.4 > d ? n.mode = "android-dpi" : d >= 4.4 && (n.mode = n.dWidth > n.uWidth ? "android-dpi" : "android-scale")), function () {
-            var d,
-                o,
-                a,
-                s = "",
-                h = !1;
-
-            switch (-1 !== n.userAgent.indexOf("Pixel") && (n.mode = "apple"), n.mode) {
-              case "apple":
-                s = "width=" + t.designWidth + ", user-scalable=no, user-scalable=0";
-                break;
-
-              case "android-2.2":
-                e.dWidth || (n.dWidth = 2 == n.ratio ? 720 : 1.5 == n.ratio ? 480 : 1 == n.ratio ? 320 : .75 == n.ratio ? 240 : 480), 320 == (d = window.screen.width || window.screen.availWidth) ? n.dWidth = n.ratio * d : 640 > d && (n.dWidth = d), n.mode = "android-dpi", h = !0;
-
-              case "android-dpi":
-                s = " width=" + n.uWidth + ", user-scalable=no", h && (n.mode = "android-2.2");
-                break;
-
-              case "android-scale":
-                s = "width=" + n.uWidth + ", user-scalable=no";
-            }
-
-            null !== i ? i.content = s : ((o = document.querySelector("meta[name='viewport']") || document.createElement("meta")).name = "viewport", o.content = s, (a = document.getElementsByTagName("head")).length > 0 && a[0].appendChild(o));
-          }(), n.bConsole && s();
-        }
-
-        var d;
-      } else {
-        var o = "width=" + this.viewPortSettings.width + ", initial-scale=" + this.viewPortSettings.initialScale + ",user-scalable=" + this.viewPortSettings.userScalable;
-        null !== i ? i.content = o : ((s = document.querySelector("meta[name='viewport']") || document.createElement("meta")).name = "viewport", s.content = o, a = document.getElementsByTagName("head"), a.length > 0 && a[0].appendChild(s));
-      }
-    } else null !== i && i.remove();
-
-    function s() {
-      for (key in n) {
-        key + ": " + n[key] + "; ";
-      }
-    }
-  };
-};
+var _mobileAdp_str = "window.__m_adp__ = function(e,i){var t=this;this.defaultOptions={fontSize:14,designWidth:1360,designHeight:755,scaleLimit:{enable:!1,maxWidth:1360,minWidth:800,maxHeight:755,minHeight:600},hCallBack:function(){},vCallBack:function(){},mode:\"auto\",debounceTime:500,viewPort:{mode:\"auto\",width:\"device-width\",initialScale:\"1.0\",userScalable:\"yes\"},is_relate_with_devicePixelRatio:!1};var n=function(e,i){for(var t in e=e||{},i)\"object\"==typeof i[t]?e[t]=n(e[t],i[t]):e[t]=i[t];return e};e=n(this.defaultOptions,e),this.fontSize=e.fontSize,this.computedFontSize=0,this.orgFontSize_widthOutRatoComput=0,this.designWidth=e.designWidth,this.designHeight=e.designHeight,this.hCallBack=e.hCallBack,this.vCallBack=e.vCallBack,this.scaleLimit=e.scaleLimit,this.debounceTime=e.debounceTime,this.mode=e.mode,this.is_relate_with_devicePixelRatio=e.is_relate_with_devicePixelRatio,this.state=\"\",this.viewPortSettings=e.viewPort,this.init=function(e){this.adaptVP({uWidth:this.designWidth}),this.adpRem(),void 0!==e&&e()},this.rebind=function(e,i){e=n(this.defaultOptions,e),this.fontSize=e.fontSize,this.designWidth=e.designWidth,this.designHeight=e.designHeight,this.hCallBack=e.hCallBack,this.vCallBack=e.vCallBack,this.scaleLimit=e.scaleLimit,this.mode=e.mode,this.state=\"\",this.init(function(){\"undefined\"!=typeof _callback&&i()})},this.reInit=function(){for(var e=[],n=0;n<i.queryList.length;n++){var d=i.queryList[n],o=!1;d.mediaQuery.screenState===t.state&&(o=!0),o&&e.push(d)}o&&d.mediaQuery.config;var a=window.document.documentElement.clientWidth,s=window.document.documentElement.clientHeight;let h=function(e){return-1===e?9999999999:e};if(void 0!==window._a_d_p_d_lockConfig&&(e=[window._a_d_p_d_lockConfig]),0!==e.length)if(1===e.length)t.rebind(e[0].mediaQuery.config);else{var l=null;for(n=0;n<e.length;n++){var r=e[n];if(void 0!==r.mediaQuery.scope){if(r.mediaQuery.scope.startWidth<=a&&h(r.mediaQuery.scope.endWidth)>a&&r.mediaQuery.scope.startHeight<=s&&h(r.mediaQuery.scope.endHeight)>s){l=r;break}}else l=r}t.rebind(l.mediaQuery.config)}},this.adpRem=function(){!function(e,n){var d=e.documentElement,o=\"orientationchange\"in window?\"orientationchange\":\"resize\",a=function(){var e=d.clientWidth,n=d.clientHeight;if(!0===t.scaleLimit.enable&&(e>t.scaleLimit.maxWidth&&(e=t.scaleLimit.maxWidth),e<t.scaleLimit.minWidth&&(e=t.scaleLimit.minWidth),n>t.scaleLimit.maxHeight&&(n=t.scaleLimit.maxHeight),n<t.scaleLimit.minHeight&&(n=t.scaleLimit.minHeight)),void 0===window._a_d_p_d_lockConfig)if(e>n){if(void 0!==i&&i.hasOwnProperty(\"queryList\")&&\"h\"!==t.state&&\"\"!==t.state)return t.state=\"h\",void t.reInit();t.state=\"h\",t.hCallBack(t)}else{if(void 0!==i&&i.hasOwnProperty(\"queryList\")&&\"v\"!==t.state&&\"\"!==t.state)return t.state=\"v\",void t.reInit();t.state=\"v\",t.vCallBack(t)}var o=null;if(e){var a=t.designWidth/t.designHeight,s=e/n,h=0,l=function(){o=e,h=t.fontSize*(o/t.designWidth)},r=function(){o=n,h=t.fontSize*(o/t.designHeight)};\"auto\"===t.mode?a<s?r():l():\"width\"===t.mode?l():\"height\"===t.mode&&r();var c=Number((h*t.getDevicePixelRatio()).toFixed(1));document.documentElement.style.fontSize=c+\"px\",t.computedFontSize=c,t.orgFontSize_widthOutRatoComput=Number(h.toFixed(1))}};let s=function(){t.debounceSetFontSize(a)};e.addEventListener&&(n.addEventListener(o,s,!1),e.addEventListener(\"DOMContentLoaded\",s,!1),t.distory=function(){clearTimeout(t.debounceTimeOut),n.removeEventListener(o,s),e.removeEventListener(\"DOMContentLoaded\",s)},s())}(document,window)},this.debounceTimeOut=null,this.getDevicePixelRatio=function(){return this.is_relate_with_devicePixelRatio&&\"undefined\"!=typeof window&&void 0!==window.devicePixelRatio?Number((window.outerWidth/window.innerWidth).toFixed(2)):1},this.debounceSetFontSize=function(e){null!==this.debounceTimeOut&&clearTimeout(this.debounceTimeOut),this.debounceTime<=0?e():(null===this.debounceTimeOut&&e(),this.debounceTimeOut=setTimeout(function(){e(),t.debounceTimeOut=null},this.debounceTime))},this.adaptVP=function(e){var i=document.querySelector(\"meta[name='viewport']\");if(\"off\"!==this.viewPortSettings.mode)if(\"config\"!==this.viewPortSettings.mode){if(e){var n={uWidth:0,dWidth:0,ratio:1,mode:\"apple\",userAgent:null,bConsole:!1};n.uWidth=e.uWidth?e.uWidth:640,n.dWidth=e.dWidth?e.dWidth:window.screen.width||window.screen.availWidth,n.ratio=window.devicePixelRatio?window.devicePixelRatio:1,n.userAgent=navigator.userAgent,n.bConsole=!!e.bConsole&&e.bConsole,e.mode?n.mode=e.mode:n.userAgent.match(/Android/i)&&(n.mode=\"android-2.2\",(d=n.userAgent.match(/Androids(d+.d+)/i))&&(d=parseFloat(d[1])),2.2==d||2.3==d?n.mode=\"android-2.2\":4.4>d?n.mode=\"android-dpi\":d>=4.4&&(n.mode=n.dWidth>n.uWidth?\"android-dpi\":\"android-scale\")),function(){var d,o,a,s=\"\",h=!1;switch(-1!==n.userAgent.indexOf(\"Pixel\")&&(n.mode=\"apple\"),n.mode){case\"apple\":s=\"width=\"+t.designWidth+\", user-scalable=no, user-scalable=0\";break;case\"android-2.2\":e.dWidth||(n.dWidth=2==n.ratio?720:1.5==n.ratio?480:1==n.ratio?320:.75==n.ratio?240:480),320==(d=window.screen.width||window.screen.availWidth)?n.dWidth=n.ratio*d:640>d&&(n.dWidth=d),n.mode=\"android-dpi\",h=!0;case\"android-dpi\":n.uWidth,n.dWidth,n.ratio,s=\" width=\"+n.uWidth+\", user-scalable=no\",h&&(n.mode=\"android-2.2\");break;case\"android-scale\":n.uWidth,n.dWidth,n.ratio,s=\"width=\"+n.uWidth+\", user-scalable=no\"}null!==i?i.content=s:((o=document.querySelector(\"meta[name='viewport']\")||document.createElement(\"meta\")).name=\"viewport\",o.content=s,(a=document.getElementsByTagName(\"head\")).length>0&&a[0].appendChild(o))}(),n.bConsole&&s()}var d}else{var o=\"width=\"+this.viewPortSettings.width+\", initial-scale=\"+this.viewPortSettings.initialScale+\",user-scalable=\"+this.viewPortSettings.userScalable;null!==i?i.content=o:((s=document.querySelector(\"meta[name='viewport']\")||document.createElement(\"meta\")).name=\"viewport\",s.content=o,a=document.getElementsByTagName(\"head\"),a.length>0&&a[0].appendChild(s))}else null!==i&&i.remove();function s(){for(key in n)key+\": \"+n[key]+\"; \"}}};";
 
 /**
  * 创建一个需要全局使用的context
@@ -774,8 +602,8 @@ var resoForServer = function resoForServer(config) {
     var helTags;
     var injectElements;
     var scrStr = '';
-    var codeString = codeStringify(_mobileAdp$1);
-    scrStr = " window.__m_adp__ = " + codeString + ";var _adp_config = " + JSON.stringify(config) + ";if(_adp_config.hasOwnProperty(\"queryList\")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState=\"h\";testState=clientWidth>windowHeight?\"h\":\"v\";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();";
+    var codeString = _mobileAdp_str;
+    scrStr = codeString + ";var _adp_config = " + JSON.stringify(config) + ";if(_adp_config.hasOwnProperty(\"queryList\")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState=\"h\";testState=clientWidth>windowHeight?\"h\":\"v\";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();";
     injectElements = React__default.createElement("script", {
       id: "_a_d_p_"
     }, scrStr);
@@ -837,12 +665,8 @@ var useReso = function useReso(config) {
 
       mobileAdp.init();
     } else {
-      /* let UglifyJS = require('uglify-js'); */
-      var codeString = codeStringify(_mobileAdp$1);
-      scrStr = " window.__m_adp__ = " + codeString + ";var _adp_config = " + JSON.stringify(config) + ";if(_adp_config.hasOwnProperty(\"queryList\")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState=\"h\";testState=clientWidth>windowHeight?\"h\":\"v\";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();";
-      /*       let code = { 'reso.js': scrStr };
-      scrStr = UglifyJS.minify(code).code; */
-
+      var codeString = _mobileAdp_str;
+      scrStr = codeString + ";var _adp_config = " + JSON.stringify(config) + ";if(_adp_config.hasOwnProperty(\"queryList\")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState=\"h\";testState=clientWidth>windowHeight?\"h\":\"v\";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();";
       scrStr = scrStr.replace(/[\r\n]/g, '');
       injectElements = React__default.createElement("script", {
         id: "_a_d_p_"

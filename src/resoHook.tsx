@@ -13,11 +13,9 @@ import {
   EscreenState,
 } from './iReso';
 import { _mobileAdp } from './mobileAdp';
-import { _mobileAdp as _mobileAdpMin } from './mobileAdp_min';
+import { _mobileAdp_str } from './mobileAdp_str';
 import useJquery, { isRunningInServer } from '@bobliao/use-jquery-hook';
 import { Helmet } from 'react-helmet';
-//import requireContext from 'require-context.macro';
-import codeStringify from 'code-stringify';
 
 export type config = Iconfig | IconfigMutiple;
 
@@ -70,10 +68,9 @@ export const resoForServer = function(
     let helTags: ReactElement;
     let injectElements: ReactElement;
     let scrStr: string = '';
-    var codeString = codeStringify(_mobileAdpMin);
+    var codeString = _mobileAdp_str;
 
     scrStr =
-      ` window.__m_adp__ = ` +
       codeString +
       `;var _adp_config = ` +
       JSON.stringify(config) +
@@ -130,17 +127,13 @@ const useReso = function(config: config = { ...defaultConfig }): Ireso {
       }
       mobileAdp.init();
     } else {
-      /* let UglifyJS = require('uglify-js'); */
-      var codeString = codeStringify(_mobileAdpMin);
+      var codeString = _mobileAdp_str;
 
       scrStr =
-        ` window.__m_adp__ = ` +
         codeString +
         `;var _adp_config = ` +
         JSON.stringify(config) +
         `;if(_adp_config.hasOwnProperty("queryList")){var clientWidth=window.document.documentElement.clientWidth,windowHeight=window.document.documentElement.clientHeight,testState="h";testState=clientWidth>windowHeight?"h":"v";for(var i=0;i<_adp_config.queryList.length;i++){var _item=_adp_config.queryList[i],_index=i,isCondition=!1;if(_item.mediaQuery.screenState===testState&&(isCondition=!0),isCondition){_item.mediaQuery.config.debounceTime=0,window._a_d_p_d=new __m_adp__(_item.mediaQuery.config,_adp_config),window._a_d_p_d.init();break}}}else _adp_config.debounceTime=0,window._a_d_p_d=new __m_adp__(_adp_config),window._a_d_p_d.init();`;
-      /*       let code = { 'reso.js': scrStr };
-      scrStr = UglifyJS.minify(code).code; */
       scrStr = scrStr.replace(/[\r\n]/g, '');
       injectElements = <script id="_a_d_p_">{scrStr}</script>;
       //如果是运行在服务端上面就写入一段原生代码,让分辨率适配在网页加载的第一时间进行适配
