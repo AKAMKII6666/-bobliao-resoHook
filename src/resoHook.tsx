@@ -64,7 +64,7 @@ export const resoForServer = function(
    * 适配
    */
   const makeReso = function(_config, _testState) {
-    let mobileAdp: any = new _mobileAdp(_config, config);
+    let mobileAdp: IMobileAdp = new _mobileAdp(_config, config);
     let helTags: ReactElement;
     let injectElements: ReactElement;
     let scrStr: string = '';
@@ -114,7 +114,7 @@ const useReso = function(config: config = { ...defaultConfig }): Ireso {
   const makeReso = function(_config, _testState) {
     //let context = requireContext("../nativeComs/", false, /mobileAdp.js/);
     //let modul = context("./mobileAdp.js");
-    let mobileAdp: any = new _mobileAdp(_config, config);
+    let mobileAdp: IMobileAdp = new _mobileAdp(_config, config);
     let helTags: ReactElement;
     let injectElements: ReactElement;
     let scrStr: string = '';
