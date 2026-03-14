@@ -232,7 +232,7 @@ const useReso = function(config: config = { ...defaultConfig }): Ireso {
         );
       }
 
-      var result: any = null;
+      var result: Ireso | null = null;
       var findedResoList: Array<Imq> = [];
       for (var i = 0; i < config.queryList.length; i++) {
         var _item: Imq = config.queryList[i];
