@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { IMobileAdp } from './mobileAdp';
 /**
  * useReso 钩子返回的东西
  */
@@ -23,7 +24,7 @@ export interface Ireso {
   /**
    * 返回初始化好的mobileAdp对象
    */
-  funcs: any;
+  funcs: IMobileAdp;
   /**
    * 屏幕状态
    */
