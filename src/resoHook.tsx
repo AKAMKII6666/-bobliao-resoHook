@@ -160,9 +160,9 @@ const useReso = function(config: config = { ...defaultConfig }): Ireso {
     };
   };
 
-  var clientWidth: number = 1920;
-  var windowHeight: number = 1080;
-  var testState: EscreenState = EscreenState.HORIZONTAL;
+  const clientWidth: number = 1920;
+  const windowHeight: number = 1080;
+  let testState: EscreenState = EscreenState.HORIZONTAL;
 
   if (clientWidth > windowHeight) {
     testState = EscreenState.HORIZONTAL;
