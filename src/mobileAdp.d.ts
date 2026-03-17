@@ -6,8 +6,8 @@ export interface IMobileAdp {
   orgFontSize_widthOutRatoComput: number;
   designWidth: number;
   designHeight: number;
-  hCallBack?: Function;
-  vCallBack?: Function;
+  hCallBack?: () => void;
+  vCallBack?: () => void;
   scaleLimit?: {
     enable: boolean;
     maxWidth?: number;
@@ -26,8 +26,8 @@ export interface IMobileAdp {
     userScalable?: 'yes' | 'no';
   };
   debounceTimeOut: NodeJS.Timeout | null;
-  init(_callback?: Function): void;
-  rebind(_options: Iconfig, _callBack?: Function): void;
+  init(_callback?: () => void): void;
+  rebind(_options: Iconfig, _callBack?: () => void): void;
   reInit(): void;
   adpRem(): void;
   getDevicePixelRatio(): number;
