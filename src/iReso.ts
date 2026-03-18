@@ -97,11 +97,11 @@ export interface Iconfig {
   /**
    * 横屏回调函数
    */
-  hCallBack?: Function;
+  hCallBack?: () => void;
   /**
    * 竖屏回调函数
    */
-  vCallBack?: Function;
+  vCallBack?: () => void;
   /**
    * 调整模式
    */
