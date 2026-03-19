@@ -114,7 +114,7 @@ const useReso = function(config: config = { ...defaultConfig }): Ireso {
   const makeReso = function(_config, _testState) {
     //let context = requireContext("../nativeComs/", false, /mobileAdp.js/);
     //let modul = context("./mobileAdp.js");
-    let mobileAdp: IMobileAdp = new _mobileAdp(_config, config);
+    let mobileAdp: IMobileAdp = new _mobileAdp(_config as Iconfig, config as Iconfig);
     let helTags: ReactElement;
     let injectElements: ReactElement;
     let scrStr: string = '';
@@ -288,3 +288,4 @@ let useResoContext = function(): Ireso {
 };
 
 export { useReso as default, _mobileAdp, resoContext, useResoContext };
+ext };

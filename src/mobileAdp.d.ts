@@ -31,7 +31,7 @@ export interface IMobileAdp {
   reInit(): void;
   adpRem(): void;
   getDevicePixelRatio(): number;
-  debounceSetFontSize(_recalc: Function): void;
+  debounceSetFontSize(_recalc: () => void): void;
   adaptVP(d: { uWidth?: number }): void;
   distory(): void;
 }
