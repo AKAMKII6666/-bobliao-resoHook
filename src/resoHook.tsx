@@ -63,8 +63,17 @@ export const resoForServer = function(
   /**
    * 适配
    */
-  const makeReso = function(_config, _testState) {
-    let mobileAdp: IMobileAdp = new _mobileAdp(_config, config);
+  const makeReso = function(_config: Iconfig | IconfigMutiple, _testState: EscreenState): {
+    data: { helTags: ReactElement; elemsnts: ReactElement; scriptStr: string };
+    funcs: IMobileAdp;
+    screenState: EscreenState;
+    width: number;
+    height: number;
+    fontSize: number;
+    fontSize_org: number;
+    current_pixRato: number;
+  } {
+    let mobileAdp: IMobileAdp = new _mobileAdp(_config as Iconfig, config as Iconfig);
     let helTags: ReactElement;
     let injectElements: ReactElement;
     let scrStr: string = '';
@@ -111,7 +120,16 @@ const useReso = function(config: config = { ...defaultConfig }): Ireso {
   /**
    * 适配
    */
-  const makeReso = function(_config, _testState) {
+  const makeReso = function(_config: Iconfig | IconfigMutiple, _testState: EscreenState): {
+    data: { helTags: ReactElement; elemsnts: ReactElement; scriptStr: string };
+    funcs: IMobileAdp;
+    screenState: EscreenState;
+    width: number;
+    height: number;
+    fontSize: number;
+    fontSize_org: number;
+    current_pixRato: number;
+  } {
     //let context = requireContext("../nativeComs/", false, /mobileAdp.js/);
     //let modul = context("./mobileAdp.js");
     let mobileAdp: IMobileAdp = new _mobileAdp(_config as Iconfig, config as Iconfig);
