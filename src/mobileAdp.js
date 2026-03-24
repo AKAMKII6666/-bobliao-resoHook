@@ -13,7 +13,7 @@
  * 免得界面渲染完成后再适配引起页面抖动
  */
 const _mobileAdp = function(_options, _mOptions) {
-  var self = this;
+  const self = this;
 
   this.defaultOptions = {
     //页面字体基准是14像素
@@ -57,7 +57,7 @@ const _mobileAdp = function(_options, _mOptions) {
   };
 
   //拷贝函数
-  var extend = function(target, source) {
+  const extend = function(target, source) {
     target = target || {};
     for (var prop in source) {
       if (typeof source[prop] === 'object') {
@@ -159,10 +159,10 @@ const _mobileAdp = function(_options, _mOptions) {
    * 重新初始化
    */
   this.reInit = function() {
-    var findedResoList = [];
+    let findedResoList = [];
     for (var i = 0; i < _mOptions.queryList.length; i++) {
-      var _item = _mOptions.queryList[i];
-      var isCondition = false;
+      let _item = _mOptions.queryList[i];
+      let isCondition = false;
       if (_item.mediaQuery.screenState === self.state) {
         isCondition = true;
       }
@@ -173,8 +173,8 @@ const _mobileAdp = function(_options, _mOptions) {
     if (isCondition) {
       _item.mediaQuery.config;
     }
-    var clientWidth = window.document.documentElement.clientWidth;
-    var windowHeight = window.document.documentElement.clientHeight;
+    let clientWidth = window.document.documentElement.clientWidth;
+    let windowHeight = window.document.documentElement.clientHeight;
 
     let getEnd = function(_ed) {
       if (_ed === -1) {
@@ -192,9 +192,9 @@ const _mobileAdp = function(_options, _mOptions) {
       if (findedResoList.length === 1) {
         self.rebind(findedResoList[0].mediaQuery.config);
       } else {
-        var last = null;
+        let last = null;
         for (var i = 0; i < findedResoList.length; i++) {
-          var citem = findedResoList[i];
+          let citem = findedResoList[i];
           if (typeof citem.mediaQuery.scope !== 'undefined') {
             if (
               citem.mediaQuery.scope.startWidth <= clientWidth &&
@@ -220,13 +220,13 @@ const _mobileAdp = function(_options, _mOptions) {
   this.adpRem = function() {
     //适配rem的算法
     (function(doc, win) {
-      var docEl = doc.documentElement,
+      let docEl = doc.documentElement,
         resizeEvt =
           'orientationchange' in window ? 'orientationchange' : 'resize',
         recalc = function() {
           //document.body.style.display = "none";
-          var clientWidth = docEl.clientWidth;
-          var windowHeight = docEl.clientHeight;
+          let clientWidth = docEl.clientWidth;
+          let windowHeight = docEl.clientHeight;
           //document.body.style.display = "";
 
           //应用大小限制选项
@@ -276,21 +276,21 @@ const _mobileAdp = function(_options, _mOptions) {
             }
           }
 
-          var compTarget = null;
+          let compTarget = null;
           if (!clientWidth) return;
           //原始比例
-          var orgPre = self.designWidth / self.designHeight;
-          var currPre = clientWidth / windowHeight;
-          var res = 0;
+          let orgPre = self.designWidth / self.designHeight;
+          let currPre = clientWidth / windowHeight;
+          let res = 0;
 
-          var adWidth = function() {
+          let adWidth = function() {
             //console.log('用宽度调整字体')
             compTarget = clientWidth;
             //计算设计字体大小和实际字体大小的比例关系
             res = self.fontSize * (compTarget / self.designWidth);
           };
 
-          var adHeight = function() {
+          let adHeight = function() {
             //console.log('用高度调整字体')
             compTarget = windowHeight;
             //计算设计字体大小和实际字体大小的比例关系
@@ -309,7 +309,7 @@ const _mobileAdp = function(_options, _mOptions) {
             adHeight();
           }
 
-          var fSize = Number((res * self.getDevicePixelRatio()).toFixed(1));
+          let fSize = Number((res * self.getDevicePixelRatio()).toFixed(1));
           //在计算过程中，加入页面缩放的数值
           document.documentElement.style.fontSize = fSize + 'px';
           self.computedFontSize = fSize;
@@ -376,7 +376,7 @@ const _mobileAdp = function(_options, _mOptions) {
   //原版算法已经找不到了
   //最后只找到了这个被压缩后的版本
   this.adaptVP = function(d) {
-    var vpObj = document.querySelector("meta[name='viewport']");
+    let vpObj = document.querySelector("meta[name='viewport']");
     //关闭viewport适配
     if (this.viewPortSettings.mode === 'off') {
       if (vpObj !== null) {
@@ -386,7 +386,7 @@ const _mobileAdp = function(_options, _mOptions) {
     }
     //打开viewPort适配但是手动适配
     if (this.viewPortSettings.mode === 'config') {
-      var vpContent =
+      let vpContent =
         'width=' +
         this.viewPortSettings.width +
         ', initial-scale=' +
@@ -410,10 +410,10 @@ const _mobileAdp = function(_options, _mOptions) {
     }
     /* 
     if (vpObj !== null) {
-      var width = '';
-      var arrVp = vpObj.content.split(',');
+      let width = '';
+      let arrVp = vpObj.content.split(',');
       for (let i = 0; i < arrVp.length; i++) {
-        var item = arrVp[i].split('=');
+        let item = arrVp[i].split('=');
         if (item[0] === 'width') {
           width = item[1];
           break;
@@ -425,7 +425,7 @@ const _mobileAdp = function(_options, _mOptions) {
       }
     } */
     function e() {
-      var e, i;
+      let e, i;
       return (
         (o.uWidth = d.uWidth ? d.uWidth : 640),
         (o.dWidth = d.dWidth
@@ -453,7 +453,7 @@ const _mobileAdp = function(_options, _mOptions) {
       );
     }
     function getContent() {
-      var e,
+      let e,
         i,
         t,
         a,
@@ -508,14 +508,14 @@ const _mobileAdp = function(_options, _mOptions) {
       }
     }
     function t() {
-      var d = '';
+      let d = '';
       for (key in o) {
         d += key + ': ' + o[key] + '; ';
       }
       //alert(d);
     }
     if (d) {
-      var o = {
+      let o = {
         uWidth: 0,
         dWidth: 0,
         ratio: 1,
