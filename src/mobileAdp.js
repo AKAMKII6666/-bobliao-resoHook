@@ -284,14 +284,12 @@ const _mobileAdp = function(_options, _mOptions) {
           let res = 0;
 
           let adWidth = function() {
-            //console.log('用宽度调整字体')
             compTarget = clientWidth;
             //计算设计字体大小和实际字体大小的比例关系
             res = self.fontSize * (compTarget / self.designWidth);
           };
 
           let adHeight = function() {
-            //console.log('用高度调整字体')
             compTarget = windowHeight;
             //计算设计字体大小和实际字体大小的比例关系
             res = self.fontSize * (compTarget / self.designHeight);
