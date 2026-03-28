@@ -12,23 +12,45 @@
  * 建议在页面加载进来的第一时间完成适配
  * 免得界面渲染完成后再适配引起页面抖动
  */
+
+/**
+ * 设计稿尺寸常量
+ */
+const DESIGN_WIDTH = 1360;
+const DESIGN_HEIGHT = 755;
+
+/**
+ * 缩放限制默认值
+ */
+const SCALE_LIMIT = {
+  maxWidth: SCALE_LIMIT.maxWidth,
+  minWidth: SCALE_LIMIT.minWidth,
+  maxHeight: SCALE_LIMIT.maxHeight,
+  minHeight: SCALE_LIMIT.minHeight,
+};
+
+/**
+ * 默认配置常量
+ */
+const DEFAULT_FONT_SIZE = 14;
+const DEFAULT_DEBOUNCE_TIME = 500;
 const _mobileAdp = function(_options, _mOptions) {
   const self = this;
 
   this.defaultOptions = {
     //页面字体基准是14像素
-    fontSize: 14,
+    fontSize: DEFAULT_FONT_SIZE,
     //设计稿宽度/高度
-    designWidth: 1360,
-    designHeight: 755,
+    designWidth: DESIGN_WIDTH,
+    designHeight: DESIGN_HEIGHT,
     //缩放限制参数
     //用于限制页面的缩放大小
     scaleLimit: {
       enable: false,
-      maxWidth: 1360,
-      minWidth: 800,
-      maxHeight: 755,
-      minHeight: 600,
+      maxWidth: SCALE_LIMIT.maxWidth,
+      minWidth: SCALE_LIMIT.minWidth,
+      maxHeight: SCALE_LIMIT.maxHeight,
+      minHeight: SCALE_LIMIT.minHeight,
     },
     //横屏回调函数
     hCallBack: function() {},
@@ -40,7 +62,7 @@ const _mobileAdp = function(_options, _mOptions) {
     //height:只通过高度调整
     mode: 'auto',
     //防抖时间
-    debounceTime: 500,
+    debounceTime: DEFAULT_DEBOUNCE_TIME,
     //viewPort配置
     viewPort: {
       //auto | config | off
